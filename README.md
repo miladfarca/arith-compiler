@@ -1,5 +1,5 @@
 # arith-compiler
-Implementing an arithmetic Interpreter and Compiler.
+Implementing an `Arithmetic Interpreter and Compiler`.
 
 In this project I will be writing an Interpreter/Compiler in C to do basic
 arithmetic computation.
