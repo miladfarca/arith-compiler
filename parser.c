@@ -1,6 +1,6 @@
 /**
  * First thing we need to do is come up with a Context Free Grammer which will be passed to the parse as an input.
- * Parser will use the grammer to verify the inoput string and build a tree from it.
+ * Parser will use the grammer to verify the inoput string and build an abstract syntax tree from it.
  * 
  * The grammer start like this:
  * 
@@ -45,6 +45,7 @@
  */
 #include <ctype.h>
 #include <stdio.h>
+#include "ast.h"
 #include "parser.h"
 
 // Helpers
@@ -53,76 +54,77 @@ char getCurrentChar()
     return line[currentIndex];
 }
 
-// CGF
-void E()
+// CGF returning AST Nodes
+Node *E()
 {
-    TERM();
-    R();
+    return NewNode(TERM(), R(), 0, OperatorPlus);
 }
-void R()
+Node *R()
 {
     if (getCurrentChar() == '+')
     {
         match('+');
-        TERM();
-        R();
+        return NewNode(R(), TERM(), 0, OperatorPlus);
     }
     else if (getCurrentChar() == '-')
     {
         match('-');
-        TERM();
-        R();
+        return NewNode(R(), TERM(), 0, OperatorMinus);
     }
     else
     {
         //do nothing
     }
+    return NewNode(NULL, NULL, 0, NumberValue);
 }
-void TERM()
+Node *TERM()
 {
-    FACTOR();
-    S();
+    return NewNode(FACTOR(), S(), 0, OperatorMul);
 }
-void S()
+Node *S()
 {
     if (getCurrentChar() == '*')
     {
         match('*');
-        FACTOR();
-        S();
+        return NewNode(S(), FACTOR(), 0, OperatorMul);
     }
     else if (getCurrentChar() == '/')
     {
         match('/');
-        FACTOR();
-        S();
+        return NewNode(S(), FACTOR(), 0, OperatorDiv);
     }
     else
     {
         //do nothing
     }
+    return NewNode(NULL, NULL, 1, NumberValue);
 }
-void FACTOR()
+Node *FACTOR()
 {
     if (getCurrentChar() == '(')
     {
         match('(');
-        E();
+        Node *out = E();
         match(')');
+        return out;
     }
     else if (getCurrentChar() == '-')
     {
         match('-');
-        E();
+        return NewNode(FACTOR(), NULL, 0, UnaryMinus);
     }
     else if (isdigit(getCurrentChar()))
     {
-        match(getCurrentChar());
+        char value = getCurrentChar();
+        match(value);
+        //convert char to int
+        return NewNode(NULL, NULL, value - '0', NumberValue);
     }
     else
     {
         printf("Error while parsing!\n");
     }
+    return NewNode(NULL, NULL, 0, 0);
 }
 
 void match(char in)

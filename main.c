@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "parser.h"
+#include "ast.h"
 
 int main()
 {
@@ -13,8 +14,9 @@ int main()
     read = getline(&line, &len, stdin);
     if (read > 0)
     {
-        // start parsing
-        E();
+        // start parsing and creating the AST
+        Node *root = E();
+        printf("= %d\n", (int)EvaluateAST(root));
     }
 
     free(line);
