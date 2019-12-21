@@ -3,9 +3,11 @@
 #define PARSER
 //global input string
 char *line;
+
 //global int to hold current parsing index
 int currentIndex;
 char getCurrentchar();
+int ReadNumber();
 
 //define CFG
 Node *E();

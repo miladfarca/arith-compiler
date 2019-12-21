@@ -30,12 +30,12 @@
  * Now let's fix the left recursion using the methods explained in the dragon book:
  * 
  * E      -> TERM R
- * R      -> +TERM R
- *        -> -TERM R
+ * R      -> +TERM R (Note: In AST nodes needs to be put back in order as "R TERM" from left to right while evaluating TERM first)
+ *        -> -TERM R (Note: In AST nodes needs to be put back in order as "R TERM" from left to right while evaluating TERM first)
  *        -> epsilon
  * TERM   -> FACTOR S
- * S      -> *FACTOR S
- *        -> /FACTOR S
+ * S      -> *FACTOR S (Note: In AST nodes needs to be put back in order as "S F" from left to right while evaluating F first)
+ *        -> /FACTOR S (Note: In AST nodes needs to be put back in order as "S F" from left to right while evaluating F first)
  *        -> epsilon
  * FACTOR -> (E) 
  *        -> -E
@@ -43,8 +43,10 @@
  * 
  * Now lets implenets a recursive decent parse using the above grammer. We will create a function for each variable.
  */
-#include <ctype.h>
 #include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 #include "ast.h"
 #include "parser.h"
 
@@ -52,6 +54,20 @@
 char getCurrentChar()
 {
     return line[currentIndex];
+}
+int ReadNumber()
+{
+    int startIndex = currentIndex;
+    int offset = 0;
+    while (isdigit(line[currentIndex]))
+    {
+        offset++;
+        currentIndex++;
+    }
+    //initialize all the indexes to 0
+    char buffer[32] = {0};
+    memcpy(buffer, &line[startIndex], offset);
+    return atoi(buffer);
 }
 
 // CGF returning AST Nodes
@@ -61,15 +77,21 @@ Node *E()
 }
 Node *R()
 {
+    Node *t;
+    Node *r;
     if (getCurrentChar() == '+')
     {
         match('+');
-        return NewNode(R(), TERM(), 0, OperatorPlus);
+        t = TERM();
+        r = R();
+        return NewNode(r, t, 0, OperatorPlus);
     }
     else if (getCurrentChar() == '-')
     {
         match('-');
-        return NewNode(R(), TERM(), 0, OperatorMinus);
+        t = TERM();
+        r = R();
+        return NewNode(r, t, 0, OperatorMinus);
     }
     else
     {
@@ -83,15 +105,21 @@ Node *TERM()
 }
 Node *S()
 {
+    Node *f;
+    Node *s;
     if (getCurrentChar() == '*')
     {
         match('*');
-        return NewNode(S(), FACTOR(), 0, OperatorMul);
+        f = FACTOR();
+        s = S();
+        return NewNode(s, f, 0, OperatorMul);
     }
     else if (getCurrentChar() == '/')
     {
         match('/');
-        return NewNode(S(), FACTOR(), 0, OperatorDiv);
+        f = FACTOR();
+        s = S();
+        return NewNode(s, f, 0, OperatorDiv);
     }
     else
     {
@@ -115,10 +143,9 @@ Node *FACTOR()
     }
     else if (isdigit(getCurrentChar()))
     {
-        char value = getCurrentChar();
-        match(value);
-        //convert char to int
-        return NewNode(NULL, NULL, value - '0', NumberValue);
+        int value = ReadNumber();
+        //match is omitted here as ReadNumber already increments the index
+        return NewNode(NULL, NULL, value, NumberValue);
     }
     else
     {
