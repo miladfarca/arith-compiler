@@ -1,24 +1,23 @@
 #ifndef AST
 #define AST
-typedef enum NodeType
+typedef enum node_type
 {
-    Undefined,
-    OperatorPlus,
-    OperatorMinus,
-    OperatorMul,
-    OperatorDiv,
-    UnaryMinus,
-    NumberValue
-} NodeType;
+    operator_plus,
+    operator_minus,
+    operator_mul,
+    operator_div,
+    unary_minus,
+    number_value
+} node_type;
 
-typedef struct Node
+typedef struct node
 {
-    struct Node *left;
-    struct Node *right;
-    NodeType type;
+    struct node *left;
+    struct node *right;
+    node_type type;
     int value;
-} Node;
+} node;
 
-Node *NewNode(Node *left, Node *right, int value, NodeType type);
-double EvaluateAST(Node *ast);
+node *new_node(node *left, node *right, int value, node_type type);
+double evaluate_ast(node *ast);
 #endif

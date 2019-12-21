@@ -51,114 +51,114 @@
 #include "parser.h"
 
 // Helpers
-char getCurrentChar()
+char get_current_char()
 {
-    return line[currentIndex];
+    return line[current_index];
 }
-int ReadNumber()
+int read_number()
 {
-    int startIndex = currentIndex;
+    int start_index = current_index;
     int offset = 0;
-    while (isdigit(line[currentIndex]))
+    while (isdigit(line[current_index]))
     {
         offset++;
-        currentIndex++;
+        current_index++;
     }
     //initialize all the indexes to 0
     char buffer[32] = {0};
-    memcpy(buffer, &line[startIndex], offset);
+    memcpy(buffer, &line[start_index], offset);
     return atoi(buffer);
 }
 
 // CGF returning AST Nodes
-Node *E()
+node *E()
 {
-    return NewNode(TERM(), R(), 0, OperatorPlus);
+    return new_node(TERM(), R(), 0, operator_plus);
 }
-Node *R()
+node *R()
 {
-    Node *t;
-    Node *r;
-    if (getCurrentChar() == '+')
+    node *t;
+    node *r;
+    if (get_current_char() == '+')
     {
         match('+');
         t = TERM();
         r = R();
-        return NewNode(r, t, 0, OperatorPlus);
+        return new_node(r, t, 0, operator_plus);
     }
-    else if (getCurrentChar() == '-')
+    else if (get_current_char() == '-')
     {
         match('-');
         t = TERM();
         r = R();
-        return NewNode(r, t, 0, OperatorMinus);
+        return new_node(r, t, 0, operator_minus);
     }
     else
     {
         //do nothing
     }
-    return NewNode(NULL, NULL, 0, NumberValue);
+    return new_node(NULL, NULL, 0, number_value);
 }
-Node *TERM()
+node *TERM()
 {
-    return NewNode(FACTOR(), S(), 0, OperatorMul);
+    return new_node(FACTOR(), S(), 0, operator_mul);
 }
-Node *S()
+node *S()
 {
-    Node *f;
-    Node *s;
-    if (getCurrentChar() == '*')
+    node *f;
+    node *s;
+    if (get_current_char() == '*')
     {
         match('*');
         f = FACTOR();
         s = S();
-        return NewNode(s, f, 0, OperatorMul);
+        return new_node(s, f, 0, operator_mul);
     }
-    else if (getCurrentChar() == '/')
+    else if (get_current_char() == '/')
     {
         match('/');
         f = FACTOR();
         s = S();
-        return NewNode(s, f, 0, OperatorDiv);
+        return new_node(s, f, 0, operator_div);
     }
     else
     {
         //do nothing
     }
-    return NewNode(NULL, NULL, 1, NumberValue);
+    return new_node(NULL, NULL, 1, number_value);
 }
-Node *FACTOR()
+node *FACTOR()
 {
-    if (getCurrentChar() == '(')
+    if (get_current_char() == '(')
     {
         match('(');
-        Node *out = E();
+        node *out = E();
         match(')');
         return out;
     }
-    else if (getCurrentChar() == '-')
+    else if (get_current_char() == '-')
     {
         match('-');
-        return NewNode(FACTOR(), NULL, 0, UnaryMinus);
+        return new_node(FACTOR(), NULL, 0, unary_minus);
     }
-    else if (isdigit(getCurrentChar()))
+    else if (isdigit(get_current_char()))
     {
-        int value = ReadNumber();
+        int value = read_number();
         //match is omitted here as ReadNumber already increments the index
-        return NewNode(NULL, NULL, value, NumberValue);
+        return new_node(NULL, NULL, value, number_value);
     }
     else
     {
         printf("Error while parsing!\n");
     }
-    return NewNode(NULL, NULL, 0, 0);
+    return new_node(NULL, NULL, 0, 0);
 }
 
 void match(char in)
 {
-    if (getCurrentChar() == in)
+    if (get_current_char() == in)
     {
-        currentIndex++;
+        current_index++;
     }
     else
     {

@@ -8,15 +8,15 @@ int main()
     line = NULL;
     size_t len = 0;
     ssize_t read;
-    currentIndex = 0;
+    current_index = 0;
 
     //read from stdin
     read = getline(&line, &len, stdin);
     if (read > 0)
     {
         // start parsing and creating the AST
-        Node *root = E();
-        printf("= %d\n", (int)EvaluateAST(root));
+        node *root = E();
+        printf("= %d\n", (int)evaluate_ast(root));
     }
 
     free(line);

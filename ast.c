@@ -2,38 +2,38 @@
 #include <stdlib.h>
 #include "ast.h"
 
-Node *NewNode(Node *left, Node *right, int value, NodeType type)
+node *new_node(node *left, node *right, int value, node_type type)
 {
-    Node *returnNode = (Node *)malloc(sizeof(Node));
-    returnNode->left = left;
-    returnNode->right = right;
-    returnNode->value = value;
-    returnNode->type = type;
-    return returnNode;
+    node *return_node = (node *)malloc(sizeof(node));
+    return_node->left = left;
+    return_node->right = right;
+    return_node->value = value;
+    return_node->type = type;
+    return return_node;
 }
 
-double EvaluateAST(Node *ast)
+double evaluate_ast(node *ast)
 {
     if (ast == NULL)
         printf("AST is NULL!\n");
 
-    if (ast->type == NumberValue)
+    if (ast->type == number_value)
         return ast->value;
-    else if (ast->type == UnaryMinus)
-        return -EvaluateAST(ast->left);
+    else if (ast->type == unary_minus)
+        return -evaluate_ast(ast->left);
     else
     {
-        double v1 = EvaluateAST(ast->left);
-        double v2 = EvaluateAST(ast->right);
+        double v1 = evaluate_ast(ast->left);
+        double v2 = evaluate_ast(ast->right);
         switch (ast->type)
         {
-        case OperatorPlus:
+        case operator_plus:
             return v1 + v2;
-        case OperatorMinus:
+        case operator_minus:
             return v1 - v2;
-        case OperatorMul:
+        case operator_mul:
             return v1 * v2;
-        case OperatorDiv:
+        case operator_div:
             return v1 / v2;
         }
     }
