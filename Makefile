@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I.
 ODIR=obj
-_OBJ = main.o parser.o ast.o
+_OBJ = main.o parser.o ast.o codegen.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)

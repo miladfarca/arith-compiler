@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "parser.h"
 #include "ast.h"
+#include "codegen.h"
 
 int main()
 {
@@ -16,8 +17,17 @@ int main()
     {
         // start parsing and creating the AST
         node *root = E();
-        printf("= %d\n", (int)evaluate_ast(root));
+        // start evaluating and codegen
+        init_codegen();
+        evaluate_ast(root);
+
+        //load_int_to_register(6, eax);
+        //load_int_to_register(7, ebx);
+        //multiply_register_to_register(eax, ebx);
+
+        printf("= %d\n", run_codegen_and_return());
     }
 
     free(line);
+    return 0;
 }

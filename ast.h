@@ -1,4 +1,5 @@
 #ifndef AST
+#include "codegen.h"
 #define AST
 typedef enum node_type
 {
@@ -19,5 +20,5 @@ typedef struct node
 } node;
 
 node *new_node(node *left, node *right, int value, node_type type);
-double evaluate_ast(node *ast);
+a_register evaluate_ast(node *ast);
 #endif

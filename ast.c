@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include "ast.h"
+#include "codegen.h"
 
 node *new_node(node *left, node *right, int value, node_type type)
 {
@@ -12,29 +14,43 @@ node *new_node(node *left, node *right, int value, node_type type)
     return return_node;
 }
 
-double evaluate_ast(node *ast)
+a_register evaluate_ast(node *ast)
 {
     if (ast == NULL)
+    {
         printf("AST is NULL!\n");
-
-    if (ast->type == number_value)
-        return ast->value;
+    }
+    else if (ast->type == number_value)
+    {
+        a_register free_reg = get_free_register();
+        load_int_to_register(ast->value, free_reg);
+        return free_reg;
+    }
     else if (ast->type == unary_minus)
-        return -evaluate_ast(ast->left);
+    {
+        //-evaluate_ast(ast->left);
+    }
     else
     {
-        double v1 = evaluate_ast(ast->left);
-        double v2 = evaluate_ast(ast->right);
+        a_register r0 = evaluate_ast(ast->left);
+        a_register r1 = evaluate_ast(ast->right);
         switch (ast->type)
         {
         case operator_plus:
-            return v1 + v2;
+            //add_scratch_to_accum();
+            add_register_to_register(r0, r1);
+            dealocate_reg(r1);
+            return r0;
         case operator_minus:
-            return v1 - v2;
+            //subtract_scratch_from_accum();
+            break;
         case operator_mul:
-            return v1 * v2;
+            multiply_register_to_register(r0, r1);
+            dealocate_reg(r1);
+            return r0;
         case operator_div:
-            return v1 / v2;
+            //
+            break;
         }
     }
     return 0;
