@@ -73,7 +73,9 @@ int read_number()
 // CGF returning AST Nodes
 node *E()
 {
-    return new_node(TERM(), R(), 0, operator_plus);
+    node *t = TERM();
+    node *r = R();
+    return new_node(t, r, 0, operator_plus);
 }
 node *R()
 {
@@ -101,7 +103,9 @@ node *R()
 }
 node *TERM()
 {
-    return new_node(FACTOR(), S(), 0, operator_mul);
+    node *f = FACTOR();
+    node *s = S();
+    return new_node(f, s, 0, operator_mul);
 }
 node *S()
 {
