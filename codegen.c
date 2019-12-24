@@ -8,8 +8,9 @@
 //arch specific
 // register allocation
 a_register first_reg = eax;
+a_register scratch_reg = edi;
 // list of registers that should not be used directly
-a_register forbidden_registers[] = {edx, esp, ebp};
+a_register forbidden_registers[] = {edx, esp, ebp, edi};
 a_register allocated_registers[reg_count] = {0};
 
 // helpers
@@ -151,12 +152,13 @@ void divide_register_by_register(a_register reg_0, a_register reg_1)
     // we will have to use eax as src and dest reg while computing
     // format: F7 /7
     // idiv %reg
-    printf("r0=%d\n", reg_0);
-    printf("r1=%d\n", reg_1);
+    // save eax content and restore later
+    move_register_to_register(scratch_reg, eax);
     move_register_to_register(eax, reg_0);
     emit(0xf7);
     emit((char)(0xf8 + reg_1));
     move_register_to_register(reg_0, eax);
+    move_register_to_register(eax, scratch_reg);
 }
 
 void prepare_return()
