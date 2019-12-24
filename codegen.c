@@ -3,10 +3,11 @@
 #include <sys/mman.h>
 #include "codegen.h"
 
+#define reg_count 8
+
 //arch specific
 // register allocation
 a_register first_reg = eax;
-const int reg_count = 8;
 // list of registers that should not be used directly
 a_register forbidden_registers[] = {edx, esp, ebp};
 a_register allocated_registers[reg_count] = {0};
