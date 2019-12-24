@@ -21,9 +21,10 @@ int main()
         init_codegen();
         evaluate_ast(root);
 
-        //load_int_to_register(6, eax);
-        //load_int_to_register(7, ebx);
-        //multiply_register_to_register(eax, ebx);
+        /*load_int_to_register(5, ecx);
+        load_int_to_register(20, ebx);
+        divide_register_by_register(ebx, ecx);
+        move_register_to_register(eax, ebx);*/
 
         printf("= %d\n", run_codegen_and_return());
     }

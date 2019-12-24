@@ -24,6 +24,7 @@ a_register evaluate_ast(node *ast)
     {
         a_register free_reg = get_free_register();
         load_int_to_register(ast->value, free_reg);
+        set_final_destination(free_reg);
         return free_reg;
     }
     else if (ast->type == unary_minus)
@@ -39,19 +40,25 @@ a_register evaluate_ast(node *ast)
         case operator_plus:
             //add_scratch_to_accum();
             add_register_to_register(r0, r1);
+            set_final_destination(r0);
             dealocate_reg(r1);
             return r0;
         case operator_minus:
-            //subtract_scratch_from_accum();
-            break;
+            subtract_register_from_register(r0, r1);
+            set_final_destination(r0);
+            dealocate_reg(r1);
+            return r0;
         case operator_mul:
             multiply_register_to_register(r0, r1);
+            set_final_destination(r0);
             dealocate_reg(r1);
             return r0;
         case operator_div:
-            //
-            break;
+            divide_register_by_register(r0, r1);
+            set_final_destination(r0);
+            dealocate_reg(r1);
+            return r0;
         }
     }
-    return 0;
+    return -1;
 }
