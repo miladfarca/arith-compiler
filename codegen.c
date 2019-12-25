@@ -3,17 +3,8 @@
 #include <sys/mman.h>
 #include "codegen.h"
 
-#define reg_count 8
-
-//arch specific
-// register allocation
-a_register first_reg = eax;
-a_register scratch_reg = edi;
-// list of registers that should not be used directly
-a_register forbidden_registers[] = {edx, esp, ebp, edi};
-a_register allocated_registers[reg_count] = {0};
-
 // helpers
+a_register allocated_registers[REG_COUNT] = {0};
 void init_codegen()
 {
     //reserve memory and init offset
@@ -40,10 +31,6 @@ int run_codegen_and_return()
     int (*fun_ptr)() = codegen_mem;
     return (*fun_ptr)();
 }
-void set_final_destination(a_register reg)
-{
-    final_destination = reg;
-}
 
 // reg allocation
 a_register get_free_register()
@@ -51,7 +38,7 @@ a_register get_free_register()
     // loop all listed regs. If any is not allocated
     // then mark it as allocated and return it
     int i;
-    for (i = 0; i <= reg_count - 1; i++)
+    for (i = 0; i <= REG_COUNT - 1; i++)
     {
         // we need to match the first arch register to index 0
         // of our allocated_registers, check if there is an offset
@@ -59,7 +46,7 @@ a_register get_free_register()
         {
             printf("allocated %d\n", i);
             allocated_registers[i] = 1;
-            return i + first_reg;
+            return i + FIRST_REG;
         }
     }
     printf("no more registers!\n");
@@ -68,103 +55,59 @@ a_register get_free_register()
 void dealocate_reg(a_register reg)
 {
     //check if it's a forbidden regsiter
-    if (allocated_registers[reg - first_reg] != -1)
+    if (allocated_registers[reg - FIRST_REG] != -1)
     {
-        allocated_registers[reg - first_reg] = 0;
+        allocated_registers[reg - FIRST_REG] = 0;
         printf("de-allocated %d\n", reg);
     }
 }
-
-// opcodes
-//TODO: explain format and how code is emitted
-//TODO: how is endianness effecting this
-void load_int_to_register(int imm, a_register reg)
+void set_final_destination(a_register reg)
 {
-    //TODO: wy is the reg code calc diff from others
-    // movl $imm, %reg
-    emit((char)(0xb8 + reg));
-    emit((char)imm);
-    emit(0x00);
-    emit(0x00);
-    emit(0x00);
-}
-void move_register_to_register(a_register reg_0, a_register reg_1)
-{
-    // dst = reg_0
-    // mov %reg_0, %reg_1
-    // format: 89 /r
-    unsigned char reg_code = 0xc0;
-    // add reg_0
-    reg_code |= (unsigned char)reg_1 << 3;
-    // add reg_1
-    reg_code |= (unsigned char)reg_0;
-    emit(0x89);
-    emit(reg_code);
-}
-void add_register_to_register(a_register reg_0, a_register reg_1)
-{
-    // dst = reg_0
-    // add $reg_0, %reg_1
-    // format: 01 /r
-    // r : 1 1 (_ _ _) (_ _ _) = 1 1 reg_1 reg_0
-    unsigned char reg_code = 0xc0;
-    // add reg_0
-    reg_code |= (unsigned char)reg_1 << 3;
-    // add reg_1
-    reg_code |= (unsigned char)reg_0;
-    emit(0x01);
-    emit(reg_code);
+    final_destination = reg;
 }
 
-void subtract_register_from_register(a_register reg_0, a_register reg_1)
-{
-    // dst = reg_0
-    // sub $ebx, %eax
-    // format: 29 /r
-    unsigned char reg_code = 0xc0;
-    // add reg_0
-    reg_code |= (unsigned char)reg_1 << 3;
-    // add reg_1
-    reg_code |= (unsigned char)reg_0;
-    emit(0x29);
-    emit(reg_code);
-}
+//opcodes
+#define ARCH_OPCODES(arch)                                                   \
+    void load_int_to_register(int imm, a_register reg)                       \
+    {                                                                        \
+        load_int_to_register_##arch(imm, reg);                               \
+    }                                                                        \
+    void move_register_to_register(a_register reg_0, a_register reg_1)       \
+    {                                                                        \
+        move_register_to_register_##arch(reg_0, reg_1);                      \
+    }                                                                        \
+    void add_register_to_register(a_register reg_0, a_register reg_1)        \
+    {                                                                        \
+        add_register_to_register_##arch(reg_0, reg_1);                       \
+    }                                                                        \
+    void subtract_register_from_register(a_register reg_0, a_register reg_1) \
+    {                                                                        \
+        subtract_register_from_register_##arch(reg_0, reg_1);                \
+    }                                                                        \
+    void multiply_register_to_register(a_register reg_0, a_register reg_1)   \
+    {                                                                        \
+        multiply_register_to_register_##arch(reg_0, reg_1);                  \
+    }                                                                        \
+    void divide_register_by_register(a_register reg_0, a_register reg_1)     \
+    {                                                                        \
+        divide_register_by_register_##arch(reg_0, reg_1);                    \
+    }                                                                        \
+    void prepare_return()                                                    \
+    {                                                                        \
+        prepare_return_##arch();                                             \
+    }
 
-void multiply_register_to_register(a_register reg_0, a_register reg_1)
-{
-    //TODO: why the reg order differs from add?
-    // format:  0F AF /r
-    // dest = reg_0
-    // imul %reg_0, %reg_1
-    unsigned char reg_code = 0xc0;
-    // add reg_0
-    reg_code |= (unsigned char)reg_0 << 3;
-    // add reg_1
-    reg_code |= (unsigned char)reg_1;
-    emit(0x0f);
-    emit(0xaf);
-    emit(reg_code);
-}
-
-void divide_register_by_register(a_register reg_0, a_register reg_1)
-{
-    // dest = reg_0
-    // we will have to use eax as src and dest reg while computing
-    // format: F7 /7
-    // idiv %reg
-    // save eax content and restore later
-    move_register_to_register(scratch_reg, eax);
-    move_register_to_register(eax, reg_0);
-    emit(0xf7);
-    emit((char)(0xf8 + reg_1));
-    move_register_to_register(reg_0, eax);
-    move_register_to_register(eax, scratch_reg);
-}
-
-void prepare_return()
-{
-    //return register is eax
-    move_register_to_register(eax, final_destination);
-    // retq
-    emit(0xc3);
-}
+#if defined(_M_X64) || defined(__x86_64__)
+// x64
+ARCH_OPCODES(x64)
+#elif defined(__AARCH64EL__) || defined(_M_ARM64)
+// ARM64
+#elif defined(__mips64)
+// MIPS64
+#elif defined(__PPC64__) || defined(_ARCH_PPC64)
+// PPC64
+#elif defined(__s390__) || defined(__s390x__)
+// S390x
+#else
+#error "Unknown architecture!"
+#endif

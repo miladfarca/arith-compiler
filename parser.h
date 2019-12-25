@@ -2,6 +2,7 @@
 #include "ast.h"
 #define PARSER
 //global input string
+//TODO: maybe use extern?
 char *line;
 
 //global int to hold current parsing index

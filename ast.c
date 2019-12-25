@@ -38,7 +38,6 @@ a_register evaluate_ast(node *ast)
         switch (ast->type)
         {
         case operator_plus:
-            //add_scratch_to_accum();
             add_register_to_register(r0, r1);
             set_final_destination(r0);
             dealocate_reg(r1);

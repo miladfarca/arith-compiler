@@ -1,10 +1,11 @@
+VPATH=${SRC_PATH}:./:x64/
 CC=gcc
-CFLAGS=-I.
+CFLAGS=-Wall
 ODIR=obj
-_OBJ = main.o parser.o ast.o codegen.o
+_OBJ = main.o parser.o ast.o codegen.o codegen-x64.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-$(ODIR)/%.o: %.c $(DEPS)
+$(ODIR)/%.o: %.c
 	@mkdir -p $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS)
 

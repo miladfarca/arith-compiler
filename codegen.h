@@ -3,31 +3,31 @@
 void *codegen_mem;
 int codegen_mem_offset;
 
-//arch specific
-// machine resgiters in order
-typedef enum a_register
-{
-    //x64 register from 0 to 3
-    eax,
-    ecx,
-    edx,
-    ebx,
-    esp,
-    ebp,
-    esi,
-    edi,
-} a_register;
+#if defined(_M_X64) || defined(__x86_64__)
+// x64
+#include "x64/codegen-x64.h"
+#elif defined(__AARCH64EL__) || defined(_M_ARM64)
+// ARM64
+#elif defined(__mips64)
+// MIPS64
+#elif defined(__PPC64__) || defined(_ARCH_PPC64)
+// PPC64
+#elif defined(__s390__) || defined(__s390x__)
+// S390x
+#else
+#error "Unknown architecture!"
+#endif
 
 //helpers
 void init_codegen();
 void emit(unsigned char byte);
 int run_codegen_and_return();
-void set_final_destination(a_register reg);
-a_register final_destination;
 
 // register allocation
 a_register get_free_register();
 void dealocate_reg(a_register reg);
+void set_final_destination(a_register reg);
+a_register final_destination;
 
 //opcodes
 void load_int_to_register(int imm, a_register reg);
