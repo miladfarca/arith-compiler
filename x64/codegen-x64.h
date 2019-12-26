@@ -17,7 +17,6 @@ typedef enum a_register
 // register allocation
 extern a_register first_reg;
 extern a_register scratch_reg;
-extern a_register register_order[REG_COUNT];
 extern a_register forbidden_registers[4];
 
 //opcodes

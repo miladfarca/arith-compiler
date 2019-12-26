@@ -8,7 +8,6 @@ a_register first_reg = eax;
 a_register scratch_reg = edi;
 // list of registers that should not be used directly
 a_register forbidden_registers[4] = {edx, esp, ebp, edi};
-a_register register_order[REG_COUNT] 
 
 // opcodes
 //TODO: explain format and how code is emitted
