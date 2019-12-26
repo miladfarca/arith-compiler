@@ -3,6 +3,10 @@
 #include <sys/mman.h>
 #include "codegen.h"
 
+//globals
+void *codegen_mem = NULL;
+int codegen_mem_offset = 0;
+
 // helpers
 a_register allocated_registers[REG_COUNT] = {0};
 void init_codegen()
@@ -46,7 +50,7 @@ a_register get_free_register()
         {
             printf("allocated %d\n", i);
             allocated_registers[i] = 1;
-            return i + FIRST_REG;
+            return i + first_reg;
         }
     }
     printf("no more registers!\n");
@@ -55,12 +59,13 @@ a_register get_free_register()
 void dealocate_reg(a_register reg)
 {
     //check if it's a forbidden regsiter
-    if (allocated_registers[reg - FIRST_REG] != -1)
+    if (allocated_registers[reg - first_reg] != -1)
     {
-        allocated_registers[reg - FIRST_REG] = 0;
+        allocated_registers[reg - first_reg] = 0;
         printf("de-allocated %d\n", reg);
     }
 }
+a_register final_destination = -1;
 void set_final_destination(a_register reg)
 {
     final_destination = reg;

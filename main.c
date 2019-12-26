@@ -4,13 +4,13 @@
 #include "ast.h"
 #include "codegen.h"
 
+char *line = NULL;
+int current_index = 0;
+
 int main()
 {
-    line = NULL;
     size_t len = 0;
     ssize_t read;
-    current_index = 0;
-
     //read from stdin
     read = getline(&line, &len, stdin);
     if (read > 0)

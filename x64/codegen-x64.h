@@ -1,3 +1,5 @@
+#define REG_COUNT 8
+
 // machine resgiters in order
 typedef enum a_register
 {
@@ -13,13 +15,10 @@ typedef enum a_register
 } a_register;
 
 // register allocation
-static const int REG_COUNT = 8;
-static const a_register FIRST_REG = eax;
-static const a_register SCRATCH_REG = edi;
-
-// list of registers that should not be used directly
-// static to avoid linker error with "Duplicate Symbols".
-static a_register forbidden_registers[4] = {edx, esp, ebp, edi};
+extern a_register first_reg;
+extern a_register scratch_reg;
+extern a_register register_order[REG_COUNT];
+extern a_register forbidden_registers[4];
 
 //opcodes
 void load_int_to_register_x64(int imm, a_register reg);

@@ -1,7 +1,7 @@
 #ifndef CODEGEN
 #define CODEGEN
-void *codegen_mem;
-int codegen_mem_offset;
+extern void *codegen_mem;
+extern int codegen_mem_offset;
 
 #if defined(_M_X64) || defined(__x86_64__)
 // x64
@@ -27,7 +27,7 @@ int run_codegen_and_return();
 a_register get_free_register();
 void dealocate_reg(a_register reg);
 void set_final_destination(a_register reg);
-a_register final_destination;
+extern a_register final_destination;
 
 //opcodes
 void load_int_to_register(int imm, a_register reg);

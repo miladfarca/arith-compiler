@@ -3,6 +3,13 @@
 #include <sys/mman.h>
 #include "../codegen.h"
 
+// register allocation
+a_register first_reg = eax;
+a_register scratch_reg = edi;
+// list of registers that should not be used directly
+a_register forbidden_registers[4] = {edx, esp, ebp, edi};
+a_register register_order[REG_COUNT] 
+
 // opcodes
 //TODO: explain format and how code is emitted
 //TODO: how is endianness effecting this
@@ -81,12 +88,12 @@ void divide_register_by_register_x64(a_register reg_0, a_register reg_1)
     // format: F7 /7
     // idiv %reg
     // save eax content and restore later
-    move_register_to_register(SCRATCH_REG, eax);
+    move_register_to_register(scratch_reg, eax);
     move_register_to_register(eax, reg_0);
     emit(0xf7);
     emit((char)(0xf8 + reg_1));
     move_register_to_register(reg_0, eax);
-    move_register_to_register(eax, SCRATCH_REG);
+    move_register_to_register(eax, scratch_reg);
 }
 
 void prepare_return_x64()
