@@ -1,4 +1,4 @@
-VPATH=${SRC_PATH}:./:x64/
+VPATH=${SRC_PATH}:./src:./src/x64/
 CC=gcc
 CFLAGS=-Wall
 ODIR=obj
