@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include "flags.h"
 #include "ast.h"
 #include "codegen.h"
 
@@ -17,6 +18,12 @@ node *new_node(node *left, node *right, int value, node_type type)
 // tree evaluation and instrcution selection
 a_register evaluate_ast(node *ast)
 {
+    if (flag__print_code && !flag__code_header_printed)
+    {
+        printf("--- Code ---\n");
+        printf("address = %p\n\n", codegen_mem);
+        flag__code_header_printed = 1;
+    }
     if (ast == NULL)
     {
         printf("AST is NULL!\n");

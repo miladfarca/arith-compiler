@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
+#include "flags.h"
 #include "codegen.h"
 
 //globals
@@ -48,7 +49,10 @@ a_register get_free_register()
         // of our allocated_registers, check if there is an offset
         if (allocated_registers[i] != 1 && allocated_registers[i] != -1)
         {
-            //printf("allocated %d\n", i);
+            if (flag__print_reg_aloc)
+            {
+                printf("> allocated %s\n", get_reg_symbol(i));
+            }
             allocated_registers[i] = 1;
             return i + first_reg;
         }
@@ -62,7 +66,10 @@ void dealocate_reg(a_register reg)
     if (allocated_registers[reg - first_reg] != -1)
     {
         allocated_registers[reg - first_reg] = 0;
-        //printf("de-allocated %d\n", reg);
+        if (flag__print_reg_aloc)
+        {
+            printf("> de-allocated %s\n", get_reg_symbol(reg));
+        }
     }
 }
 a_register final_destination = -1;
@@ -78,13 +85,16 @@ char *get_reg_symbol(a_register reg)
 }
 void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src, int has_imm_input)
 {
-    if (has_imm_input)
+    if (flag__print_code)
     {
-        printf("%-4s %s %d\n", instr_symbol, get_reg_symbol(reg_dst), imm);
-    }
-    else
-    {
-        printf("%-4s %s %s\n", instr_symbol, get_reg_symbol(reg_dst), get_reg_symbol(reg_src));
+        if (has_imm_input)
+        {
+            printf("%-4s %s %d\n", instr_symbol, get_reg_symbol(reg_dst), imm);
+        }
+        else
+        {
+            printf("%-4s %s %s\n", instr_symbol, get_reg_symbol(reg_dst), get_reg_symbol(reg_src));
+        }
     }
 }
 

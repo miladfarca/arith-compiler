@@ -57,6 +57,7 @@ char get_current_char()
 }
 int read_number()
 {
+    // need to keep reading if number is more than a char
     int start_index = current_index;
     int offset = 0;
     while (isdigit(line[current_index]))

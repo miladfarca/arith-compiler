@@ -1,14 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "flags.h"
 #include "parser.h"
 #include "ast.h"
 #include "codegen.h"
 
+// globals
 char *line = NULL;
 int current_index = 0;
 
-int main()
+int main(int argc, char **argv)
 {
+
+    //setup flags
+    parse_args(argc, argv);
+
     size_t len = 0;
     ssize_t read;
     //read from stdin
