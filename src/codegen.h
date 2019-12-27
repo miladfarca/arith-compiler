@@ -1,6 +1,6 @@
 #ifndef CODEGEN
 #define CODEGEN
-extern void *codegen_mem;
+extern unsigned char *codegen_mem;
 extern int codegen_mem_offset;
 
 #if defined(_M_X64) || defined(__x86_64__)

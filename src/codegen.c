@@ -5,19 +5,19 @@
 #include "codegen.h"
 
 //globals
-void *codegen_mem = NULL;
+unsigned char *codegen_mem = NULL;
 int codegen_mem_offset = 0;
 
 // helpers
 a_register allocated_registers[REG_COUNT] = {0};
 void init_codegen()
 {
-    //reserve memory and init offset
+    //reserve executable memory and init offset
     int size = 1024;
     codegen_mem_offset = 0;
-    codegen_mem = mmap(0, size,
-                       PROT_READ | PROT_WRITE | PROT_EXEC,
-                       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    codegen_mem = (unsigned char *)mmap(0, size,
+                                        PROT_READ | PROT_WRITE | PROT_EXEC,
+                                        MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     //set forbidden regs
     int i;
     for (i = 0; i < sizeof(forbidden_registers) / sizeof(forbidden_registers[0]); i++)
@@ -27,13 +27,12 @@ void init_codegen()
 }
 void emit(unsigned char byte)
 {
-    memcpy(codegen_mem + codegen_mem_offset, &byte, 1);
-    codegen_mem_offset++;
+    codegen_mem[codegen_mem_offset++] = byte;
 }
 int run_codegen_and_return()
 {
     prepare_return();
-    int (*fun_ptr)() = codegen_mem;
+    int (*fun_ptr)() = (void *)codegen_mem;
     return (*fun_ptr)();
 }
 
