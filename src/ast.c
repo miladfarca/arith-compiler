@@ -15,8 +15,37 @@ node *new_node(node *left, node *right, int value, node_type type)
     return return_node;
 }
 
+// tree evaluation and interpretation
+double evaluate_ast_and_interpret(node *ast)
+{
+    if (ast == NULL)
+        printf("AST is NULL!\n");
+
+    if (ast->type == number_value)
+        return ast->value;
+    else if (ast->type == unary_minus)
+        return -evaluate_ast_and_interpret(ast->left);
+    else
+    {
+        double v1 = evaluate_ast_and_interpret(ast->left);
+        double v2 = evaluate_ast_and_interpret(ast->right);
+        switch (ast->type)
+        {
+        case operator_plus:
+            return v1 + v2;
+        case operator_minus:
+            return v1 - v2;
+        case operator_mul:
+            return v1 * v2;
+        case operator_div:
+            return v1 / v2;
+        }
+    }
+    return 0;
+}
+
 // tree evaluation and instrcution selection
-a_register evaluate_ast(node *ast)
+a_register evaluate_ast_and_codegen(node *ast)
 {
     if (flag__print_code && !flag__code_header_printed)
     {
@@ -37,12 +66,12 @@ a_register evaluate_ast(node *ast)
     }
     else if (ast->type == unary_minus)
     {
-        //-evaluate_ast(ast->left);
+        //-evaluate_ast_and_codegen(ast->left);
     }
     else
     {
-        a_register r0 = evaluate_ast(ast->left);
-        a_register r1 = evaluate_ast(ast->right);
+        a_register r0 = evaluate_ast_and_codegen(ast->left);
+        a_register r1 = evaluate_ast_and_codegen(ast->right);
         switch (ast->type)
         {
         case operator_plus:
