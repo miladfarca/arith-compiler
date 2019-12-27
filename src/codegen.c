@@ -48,7 +48,7 @@ a_register get_free_register()
         // of our allocated_registers, check if there is an offset
         if (allocated_registers[i] != 1 && allocated_registers[i] != -1)
         {
-            printf("allocated %d\n", i);
+            //printf("allocated %d\n", i);
             allocated_registers[i] = 1;
             return i + first_reg;
         }
@@ -62,7 +62,7 @@ void dealocate_reg(a_register reg)
     if (allocated_registers[reg - first_reg] != -1)
     {
         allocated_registers[reg - first_reg] = 0;
-        printf("de-allocated %d\n", reg);
+        //printf("de-allocated %d\n", reg);
     }
 }
 a_register final_destination = -1;
@@ -71,35 +71,52 @@ void set_final_destination(a_register reg)
     final_destination = reg;
 }
 
+//debuging
+char *get_reg_symbol(a_register reg)
+{
+    return register_order[reg];
+}
+void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src, int has_imm_input)
+{
+    if (has_imm_input)
+    {
+        printf("%-4s %s %d\n", instr_symbol, get_reg_symbol(reg_dst), imm);
+    }
+    else
+    {
+        printf("%-4s %s %s\n", instr_symbol, get_reg_symbol(reg_dst), get_reg_symbol(reg_src));
+    }
+}
+
 //opcodes
-#define ARCH_OPCODES(arch)                                                   \
-    void load_int_to_register(int imm, a_register reg)                       \
-    {                                                                        \
-        load_int_to_register_##arch(imm, reg);                               \
-    }                                                                        \
-    void move_register_to_register(a_register reg_0, a_register reg_1)       \
-    {                                                                        \
-        move_register_to_register_##arch(reg_0, reg_1);                      \
-    }                                                                        \
-    void add_register_to_register(a_register reg_0, a_register reg_1)        \
-    {                                                                        \
-        add_register_to_register_##arch(reg_0, reg_1);                       \
-    }                                                                        \
-    void subtract_register_from_register(a_register reg_0, a_register reg_1) \
-    {                                                                        \
-        subtract_register_from_register_##arch(reg_0, reg_1);                \
-    }                                                                        \
-    void multiply_register_to_register(a_register reg_0, a_register reg_1)   \
-    {                                                                        \
-        multiply_register_to_register_##arch(reg_0, reg_1);                  \
-    }                                                                        \
-    void divide_register_by_register(a_register reg_0, a_register reg_1)     \
-    {                                                                        \
-        divide_register_by_register_##arch(reg_0, reg_1);                    \
-    }                                                                        \
-    void prepare_return()                                                    \
-    {                                                                        \
-        prepare_return_##arch();                                             \
+#define ARCH_OPCODES(arch)                                                       \
+    void load_int_to_register(int imm, a_register reg_dst)                       \
+    {                                                                            \
+        load_int_to_register_##arch(imm, reg_dst);                               \
+    }                                                                            \
+    void move_register_to_register(a_register reg_dst, a_register reg_src)       \
+    {                                                                            \
+        move_register_to_register_##arch(reg_dst, reg_src);                      \
+    }                                                                            \
+    void add_register_to_register(a_register reg_dst, a_register reg_src)        \
+    {                                                                            \
+        add_register_to_register_##arch(reg_dst, reg_src);                       \
+    }                                                                            \
+    void subtract_register_from_register(a_register reg_dst, a_register reg_src) \
+    {                                                                            \
+        subtract_register_from_register_##arch(reg_dst, reg_src);                \
+    }                                                                            \
+    void multiply_register_to_register(a_register reg_dst, a_register reg_src)   \
+    {                                                                            \
+        multiply_register_to_register_##arch(reg_dst, reg_src);                  \
+    }                                                                            \
+    void divide_register_by_register(a_register reg_dst, a_register reg_src)     \
+    {                                                                            \
+        divide_register_by_register_##arch(reg_dst, reg_src);                    \
+    }                                                                            \
+    void prepare_return()                                                        \
+    {                                                                            \
+        prepare_return_##arch();                                                 \
     }
 
 #if defined(_M_X64) || defined(__x86_64__)

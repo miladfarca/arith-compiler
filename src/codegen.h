@@ -29,12 +29,16 @@ void dealocate_reg(a_register reg);
 void set_final_destination(a_register reg);
 extern a_register final_destination;
 
+//debuging
+char *get_reg_symbol(a_register reg);
+void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src, int has_imm_input);
+
 //opcodes
-void load_int_to_register(int imm, a_register reg);
-void move_register_to_register(a_register reg_0, a_register reg_1);
-void add_register_to_register(a_register reg_0, a_register reg_1);
-void subtract_register_from_register(a_register reg_0, a_register reg_1);
-void multiply_register_to_register(a_register reg_0, a_register reg_1);
-void divide_register_by_register(a_register reg_0, a_register reg_1);
+void load_int_to_register(int imm, a_register reg_dst);
+void move_register_to_register(a_register reg_dst, a_register reg_src);
+void add_register_to_register(a_register reg_dst, a_register reg_src);
+void subtract_register_from_register(a_register reg_dst, a_register reg_src);
+void multiply_register_to_register(a_register reg_dst, a_register reg_src);
+void divide_register_by_register(a_register reg_dst, a_register reg_src);
 void prepare_return();
 #endif
