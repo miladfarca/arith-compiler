@@ -8,12 +8,16 @@ extern int codegen_mem_offset;
 #include "x64/codegen-x64.h"
 #elif defined(__AARCH64EL__) || defined(_M_ARM64)
 // ARM64
+#error "Unimplemented!"
 #elif defined(__mips64)
 // MIPS64
+#error "Unimplemented!"
 #elif defined(__PPC64__) || defined(_ARCH_PPC64)
 // PPC64
+#error "Unimplemented!"
 #elif defined(__s390__) || defined(__s390x__)
 // S390x
+#error "Unimplemented!"
 #else
 #error "Unknown architecture!"
 #endif
