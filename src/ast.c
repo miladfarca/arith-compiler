@@ -15,7 +15,7 @@ node *new_node(node *left, node *right, int value, node_type type)
     return return_node;
 }
 
-// tree evaluation and interpretation
+// tree evaluation and interpretation (jitless)
 double evaluate_ast_and_interpret(node *ast)
 {
     if (ast == NULL)
@@ -97,4 +97,34 @@ a_register evaluate_ast_and_codegen(node *ast)
         }
     }
     return -1;
+}
+
+// debugging
+int space_offset_chars = 5;
+void print_ast(node *root, int space)
+{
+    if (root == NULL)
+        return;
+    //print left node
+    print_ast(root->right, space + space_offset_chars);
+    //print this node
+    switch (root->type)
+    {
+    case operator_plus:
+        printf("%*s%c\n", space, "", '+');
+        break;
+    case operator_minus:
+        printf("%*s%c\n", space, "", '-');
+        break;
+    case operator_mul:
+        printf("%*s%c\n", space, "", '*');
+        break;
+    case operator_div:
+        printf("%*s%c\n", space, "", '/');
+        break;
+    default:
+        printf("%*s%d\n", space, "", root->value);
+    }
+    //print right node
+    print_ast(root->left, space + space_offset_chars);
 }

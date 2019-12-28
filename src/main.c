@@ -23,9 +23,14 @@ int main(int argc, char **argv)
     {
         // start parsing and creating the AST
         node *root = E();
+        // check we need to print the ast tree
+        if (flag__print_ast)
+        {
+            print_ast(root, 0);
+        }
         // start evaluating and interpret or codegen
         int output;
-        if (flag__if_interpret)
+        if (flag__if_jitless)
         {
             output = (int)evaluate_ast_and_interpret(root);
         }
