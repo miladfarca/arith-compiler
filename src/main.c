@@ -15,6 +15,19 @@ int main(int argc, char **argv)
     //setup flags
     parse_args(argc, argv);
 
+    //if help is needed
+    if (flag__print_help)
+    {
+        printf("\nflags:\n");
+        printf("%-20s %s", "--print-ast", "Print the generated Abstract Syntax Tree (AST)\n");
+        printf("%-20s %s", "--print-reg-aloc", "Print allocation and de-allocation of registers\n");
+        printf("%-20s %s", "--print-code", "Print the generated instructions\n");
+        printf("%-20s %s", "--print-all", "Print all the above\n");
+        printf("%-20s %s", "--jitless", "Interpret the result and do not generated code\n");
+        printf("\n");
+        exit(0);
+    }
+
     size_t len = 0;
     ssize_t read;
     //read from stdin
@@ -26,6 +39,7 @@ int main(int argc, char **argv)
         // check we need to print the ast tree
         if (flag__print_ast)
         {
+            printf("--- Syntax Tree ---\n\n");
             print_ast(root, 0);
         }
         // start evaluating and interpret or codegen

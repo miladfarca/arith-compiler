@@ -7,6 +7,7 @@
 
 node *new_node(node *left, node *right, int value, node_type type)
 {
+    //TODO need to clear mem here
     node *return_node = (node *)malloc(sizeof(node));
     return_node->left = left;
     return_node->right = right;
