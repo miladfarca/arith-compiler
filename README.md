@@ -34,3 +34,21 @@ $./calc
 5+4
 = 9
 ```
+
+## Syntax Tree Format
+Using the `--print-ast` flag you will be able to see the generated binary tree from your input. As an example `5+4` will produce the following:
+```
+--- Syntax Tree ---
+
+               1
+          *
+               4
+     +
+          0
++
+          1
+     *
+          5
+```
+
+Notice that the root node is at the very left of the screen `+`, the above is equivalent to this tree:
