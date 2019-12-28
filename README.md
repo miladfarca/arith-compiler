@@ -52,3 +52,12 @@ Using the `--print-ast` flag you will be able to see the generated binary tree f
 ```
 
 Notice that the root node is at the very left of the screen `+`, the above is equivalent to this tree:
+```
+           +
+       /       \  
+      *         +
+    /   \     /   \
+   5     1   0     * 
+                 /   \
+                4     1
+```        
