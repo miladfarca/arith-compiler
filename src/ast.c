@@ -16,7 +16,7 @@ node *new_node(node *left, node *right, int value, node_type type)
     return return_node;
 }
 
-// tree evaluation and interpretation (jitless)
+// tree evaluation and interpretation (jitless, Depth-first, Post-order)
 double evaluate_ast_and_interpret(node *ast)
 {
     if (ast == NULL)
@@ -45,7 +45,7 @@ double evaluate_ast_and_interpret(node *ast)
     return 0;
 }
 
-// tree evaluation and instrcution selection
+// tree evaluation and instrcution selection (Depth-first, Post-order)
 a_register evaluate_ast_and_codegen(node *ast)
 {
     if (flag__print_code && !flag__code_header_printed)
