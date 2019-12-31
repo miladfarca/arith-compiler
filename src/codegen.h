@@ -28,7 +28,7 @@ void emit(unsigned char byte);
 int run_codegen_and_return();
 
 // register allocation
-a_register get_free_register();
+a_register allocate_register();
 void dealocate_reg(a_register reg);
 void set_final_destination(a_register reg);
 extern a_register final_destination;

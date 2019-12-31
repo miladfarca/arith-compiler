@@ -37,7 +37,7 @@ int run_codegen_and_return()
 }
 
 // reg allocation
-a_register get_free_register()
+a_register allocate_register()
 {
     // loop all listed regs. If any is not allocated
     // then mark it as allocated and return it

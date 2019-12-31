@@ -60,7 +60,7 @@ a_register evaluate_ast_and_codegen(node *ast)
     }
     else if (ast->type == number_value)
     {
-        a_register free_reg = get_free_register();
+        a_register free_reg = allocate_register();
         load_int_to_register(ast->value, free_reg);
         set_final_destination(free_reg);
         return free_reg;
