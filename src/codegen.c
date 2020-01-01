@@ -18,11 +18,11 @@ void init_codegen()
     codegen_mem = (unsigned char *)mmap(0, size,
                                         PROT_READ | PROT_WRITE | PROT_EXEC,
                                         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-    //set forbidden regs
+    //set reserved regs
     int i;
-    for (i = 0; i < sizeof(forbidden_registers) / sizeof(forbidden_registers[0]); i++)
+    for (i = 0; i < sizeof(reserved_registers) / sizeof(reserved_registers[0]); i++)
     {
-        allocated_registers[forbidden_registers[i]] = -1;
+        allocated_registers[reserved_registers[i]] = -1;
     }
 }
 void emit(unsigned char byte)
@@ -61,7 +61,7 @@ a_register allocate_register()
 }
 void dealocate_reg(a_register reg)
 {
-    //check if it's a forbidden regsiter
+    //check if it's a reserved regsiter
     if (allocated_registers[reg - first_reg] != -1)
     {
         allocated_registers[reg - first_reg] = 0;

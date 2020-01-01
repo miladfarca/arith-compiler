@@ -3,7 +3,7 @@
 // machine resgiters in order
 typedef enum a_register
 {
-    //x64 register from 0 to 3
+    //x64 register from 0 to 7
     eax,
     ecx,
     edx,
@@ -17,10 +17,10 @@ typedef enum a_register
 // register allocation
 extern a_register first_reg;
 extern a_register scratch_reg;
-extern a_register forbidden_registers[4];
+extern a_register reserved_registers[4];
 extern char *register_order[REG_COUNT];
 
-//opcodes
+// opcodes
 void load_int_to_register_x64(int imm, a_register reg_dst);
 void move_register_to_register_x64(a_register reg_dst, a_register reg_src);
 void add_register_to_register_x64(a_register reg_dst, a_register reg_src);

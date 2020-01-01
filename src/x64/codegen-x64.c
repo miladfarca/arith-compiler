@@ -7,7 +7,7 @@
 a_register first_reg = eax;
 a_register scratch_reg = edi;
 // list of registers that should not be used directly
-a_register forbidden_registers[4] = {edx, esp, ebp, edi};
+a_register reserved_registers[4] = {edx, esp, ebp, edi};
 char *register_order[REG_COUNT] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
 
 // opcodes
