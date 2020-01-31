@@ -22,6 +22,7 @@ extern char *register_order[REG_COUNT];
 
 // opcodes
 void load_int_to_register_x64(int imm, a_register reg_dst);
+void negate_register_x64(a_register reg_dst);
 void move_register_to_register_x64(a_register reg_dst, a_register reg_src);
 void add_register_to_register_x64(a_register reg_dst, a_register reg_src);
 void subtract_register_from_register_x64(a_register reg_dst, a_register reg_src);

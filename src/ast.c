@@ -67,7 +67,10 @@ a_register evaluate_ast_and_codegen(node *ast)
     }
     else if (ast->type == unary_minus)
     {
-        //-evaluate_ast_and_codegen(ast->left);
+        a_register r0 = evaluate_ast_and_codegen(ast->left);
+        negate_register(r0);
+        set_final_destination(r0);
+        return r0;
     }
     else
     {
@@ -114,6 +117,7 @@ void print_ast(node *root, int space)
     case operator_plus:
         printf("%*s%c\n", space, "", '+');
         break;
+    case unary_minus:
     case operator_minus:
         printf("%*s%c\n", space, "", '-');
         break;

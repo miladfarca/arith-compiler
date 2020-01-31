@@ -39,6 +39,7 @@ void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_
 
 //opcodes
 void load_int_to_register(int imm, a_register reg_dst);
+void negate_register(a_register reg_dst);
 void move_register_to_register(a_register reg_dst, a_register reg_src);
 void add_register_to_register(a_register reg_dst, a_register reg_src);
 void subtract_register_from_register(a_register reg_dst, a_register reg_src);

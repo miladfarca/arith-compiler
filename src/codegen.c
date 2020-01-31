@@ -103,6 +103,10 @@ void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_
     {                                                                            \
         load_int_to_register_##arch(imm, reg_dst);                               \
     }                                                                            \
+    void negate_register(a_register reg_dst)                                     \
+    {                                                                            \
+        negate_register_##arch(reg_dst);                                         \
+    }                                                                            \
     void move_register_to_register(a_register reg_dst, a_register reg_src)       \
     {                                                                            \
         move_register_to_register_##arch(reg_dst, reg_src);                      \

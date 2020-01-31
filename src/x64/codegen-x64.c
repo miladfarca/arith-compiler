@@ -24,6 +24,13 @@ void load_int_to_register_x64(int imm, a_register reg_dst)
     emit(0x00);
     emit(0x00);
 }
+void negate_register_x64(a_register reg_dst)
+{
+    // This operation is equivalent to subtracting the operand from 0
+    load_int_to_register_x64(0, scratch_reg);
+    subtract_register_from_register_x64(scratch_reg, reg_dst);
+    move_register_to_register_x64(reg_dst, scratch_reg);
+}
 void move_register_to_register_x64(a_register reg_dst, a_register reg_src)
 {
     if (reg_dst != reg_src)
