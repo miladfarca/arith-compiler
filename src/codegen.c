@@ -82,12 +82,18 @@ char *get_reg_symbol(a_register reg)
 {
     return register_order[reg];
 }
-void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src, int has_imm_input)
+void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src)
 {
     if (flag__print_code)
     {
-        if (has_imm_input)
+        if (reg_dst == no_reg && reg_src == no_reg)
         {
+            // instruction has no operands
+            printf("%-4s\n", instr_symbol);
+        }
+        else if (reg_src == no_reg)
+        {
+            // immediate insted of source
             printf("%-4s %s %d\n", instr_symbol, get_reg_symbol(reg_dst), imm);
         }
         else

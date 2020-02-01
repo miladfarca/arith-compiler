@@ -4,6 +4,7 @@
 typedef enum a_register
 {
     //x64 register from 0 to 7
+    no_reg = -1,
     eax,
     ecx,
     edx,

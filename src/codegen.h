@@ -35,7 +35,7 @@ extern a_register final_destination;
 
 //debuging
 char *get_reg_symbol(a_register reg);
-void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src, int has_imm_input);
+void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src);
 
 //opcodes
 void load_int_to_register(int imm, a_register reg_dst);
