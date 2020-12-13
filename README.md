@@ -1,7 +1,7 @@
 # arith-compiler
 Implementing an `Arithmetic Interpreter and Just in time (JIT) Compiler`.
 
-In this project I will be writing an Interpreter/Compiler in C to do basic
+In this project I will be writing an Interpreter/Compiler in C for doing basic
 arithmetic computation.
 
 We will follow the methods explained in `the dragon book (Compilers: Principles, Techniques, and Tools)`. 
