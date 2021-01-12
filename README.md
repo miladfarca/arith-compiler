@@ -23,10 +23,13 @@ $ ./calc --help
 
 flags:
 --print-ast          Print the generated Abstract Syntax Tree (AST)
+--print-ast-json     Print the generated Abstract Syntax Tree (AST) in JSON format
 --print-reg-aloc     Print allocation and de-allocation of registers
 --print-code         Print the generated instructions
 --print-all          Print all the above
+--no-output          Do not print the final output
 --jitless            Interpret the result and do not generated code
+--inline             Enter the input as an argument
 ```
 You can do basic arithmetic using calc:
 ```
