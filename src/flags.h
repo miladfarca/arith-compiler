@@ -1,8 +1,11 @@
-int flag__print_ast;
-int flag__print_reg_aloc;
-int flag__print_code;
-int flag__print_all;
-int flag__print_help;
-int flag__if_jitless;
-int flag__code_header_printed;
+extern int flag__print_ast;
+extern int flag__print_ast_json;
+extern int flag__print_reg_aloc;
+extern int flag__print_code;
+extern int flag__print_all;
+extern int flag__print_help;
+extern int flag__inline;
+extern int flag__no_output;
+extern int flag__if_jitless;
+extern int flag__code_header_printed;
 void parse_args(int argc, char **argv);

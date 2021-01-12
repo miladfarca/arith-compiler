@@ -9,7 +9,7 @@ unsigned char *codegen_mem = NULL;
 int codegen_mem_offset = 0;
 
 // helpers
-a_register allocated_registers[REG_COUNT] = {0};
+fpr allocated_fprs[FPR_COUNT] = {0};
 void init_codegen()
 {
     //reserve executable memory and init offset
@@ -20,14 +20,19 @@ void init_codegen()
                                         MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     //set reserved regs
     int i;
-    for (i = 0; i < sizeof(reserved_registers) / sizeof(reserved_registers[0]); i++)
+    for (i = 0; i < sizeof(reserved_fprs) / sizeof(reserved_fprs[0]); i++)
     {
-        allocated_registers[reserved_registers[i]] = -1;
+        allocated_fprs[reserved_fprs[i]] = -1;
     }
 }
 void emit(unsigned char byte)
 {
     codegen_mem[codegen_mem_offset++] = byte;
+}
+void emit_imm(int immediate)
+{ 
+    *(int*)(codegen_mem + codegen_mem_offset) = immediate;
+    codegen_mem_offset += 4;
 }
 int run_codegen_and_return()
 {
@@ -37,105 +42,105 @@ int run_codegen_and_return()
 }
 
 // reg allocation
-a_register allocate_register()
+fpr allocate_fpr()
 {
-    // loop all listed regs. If any is not allocated
+    // loop all listed fprs. If any is not allocated
     // then mark it as allocated and return it
     int i;
-    for (i = 0; i <= REG_COUNT - 1; i++)
+    for (i = 0; i < FPR_COUNT; i++)
     {
         // we need to match the first arch register to index 0
         // of our allocated_registers, check if there is an offset
-        if (allocated_registers[i] != 1 && allocated_registers[i] != -1)
+        if (allocated_fprs[i] != 1 && allocated_fprs[i] != -1)
         {
             if (flag__print_reg_aloc)
             {
-                printf("> allocated %s\n", get_reg_symbol(i));
+                printf("> allocated %s\n", get_fpr_symbol(i));
             }
-            allocated_registers[i] = 1;
-            return i + first_reg;
+            allocated_fprs[i] = 1;
+            return i;
         }
     }
     printf("no more registers!\n");
     return -1;
 }
-void dealocate_reg(a_register reg)
+void dealocate_fpr(fpr reg)
 {
-    //check if it's a reserved regsiter
-    if (allocated_registers[reg - first_reg] != -1)
+    // check if it's a reserved regsiter
+    if (allocated_fprs[reg] != -1)
     {
-        allocated_registers[reg - first_reg] = 0;
+        allocated_fprs[reg] = 0;
         if (flag__print_reg_aloc)
         {
-            printf("> de-allocated %s\n", get_reg_symbol(reg));
+            printf("> de-allocated %s\n", get_fpr_symbol(reg));
         }
     }
 }
-a_register final_destination = -1;
-void set_final_destination(a_register reg)
+fpr final_destination = -1;
+void set_final_destination(fpr reg)
 {
     final_destination = reg;
 }
 
-//debuging
-char *get_reg_symbol(a_register reg)
+// debuging
+char *get_gpr_symbol(gpr reg)
 {
-    return register_order[reg];
+    return gpr_order[reg];
 }
-void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src)
+char *get_fpr_symbol(fpr reg)
+{
+    return fpr_order[reg];
+}
+void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char *comments)
 {
     if (flag__print_code)
     {
-        if (reg_dst == no_reg && reg_src == no_reg)
+        if (reg_dst == NULL && reg_src == NULL)
         {
             // instruction has no operands
-            printf("%-4s\n", instr_symbol);
+            printf("%-4s %s\n", instr_symbol, comments);
         }
-        else if (reg_src == no_reg)
+        else if (reg_src == NULL)
         {
             // immediate insted of source
-            printf("%-4s %s %d\n", instr_symbol, get_reg_symbol(reg_dst), imm);
+            printf("%-4s %d %s %s\n", instr_symbol, imm, reg_dst, comments);
         }
         else
         {
-            printf("%-4s %s %s\n", instr_symbol, get_reg_symbol(reg_dst), get_reg_symbol(reg_src));
+            printf("%-4s %s %s %s\n", instr_symbol, reg_src, reg_dst, comments);
         }
     }
 }
 
-//opcodes
-#define ARCH_OPCODES(arch)                                                       \
-    void load_int_to_register(int imm, a_register reg_dst)                       \
-    {                                                                            \
-        load_int_to_register_##arch(imm, reg_dst);                               \
-    }                                                                            \
-    void negate_register(a_register reg_dst)                                     \
-    {                                                                            \
-        negate_register_##arch(reg_dst);                                         \
-    }                                                                            \
-    void move_register_to_register(a_register reg_dst, a_register reg_src)       \
-    {                                                                            \
-        move_register_to_register_##arch(reg_dst, reg_src);                      \
-    }                                                                            \
-    void add_register_to_register(a_register reg_dst, a_register reg_src)        \
-    {                                                                            \
-        add_register_to_register_##arch(reg_dst, reg_src);                       \
-    }                                                                            \
-    void subtract_register_from_register(a_register reg_dst, a_register reg_src) \
-    {                                                                            \
-        subtract_register_from_register_##arch(reg_dst, reg_src);                \
-    }                                                                            \
-    void multiply_register_to_register(a_register reg_dst, a_register reg_src)   \
-    {                                                                            \
-        multiply_register_to_register_##arch(reg_dst, reg_src);                  \
-    }                                                                            \
-    void divide_register_by_register(a_register reg_dst, a_register reg_src)     \
-    {                                                                            \
-        divide_register_by_register_##arch(reg_dst, reg_src);                    \
-    }                                                                            \
-    void prepare_return()                                                        \
-    {                                                                            \
-        prepare_return_##arch();                                                 \
+// opcodes
+#define ARCH_OPCODES(arch)                                \
+    void load_int_to_fpr(int imm, gpr reg_dst)            \
+    {                                                     \
+        load_int_to_fpr_##arch(imm, reg_dst);             \
+    }                                                     \
+    void negate_fpr(fpr reg_dst)                          \
+    {                                                     \
+       negate_fpr_##arch(reg_dst);                        \
+    }                                                     \
+    void add_fpr_to_fpr(fpr reg_dst, fpr reg_src)         \
+    {                                                     \
+       add_fpr_to_fpr_##arch(reg_dst, reg_src);           \
+    }                                                     \
+    void subtract_fpr_from_fpr(fpr reg_dst, fpr reg_src)  \
+    {                                                     \
+       subtract_fpr_from_fpr_##arch(reg_dst, reg_src);    \
+    }                                                     \
+    void multiply_fpr_to_fpr(fpr reg_dst, fpr reg_src)    \
+    {                                                     \
+        multiply_fpr_to_fpr_##arch(reg_dst, reg_src);     \
+    }                                                     \
+    void divide_fpr_by_fpr(fpr reg_dst, fpr reg_src)      \
+    {                                                     \
+        divide_fpr_by_fpr_##arch(reg_dst, reg_src);       \
+    }                                                     \
+    void prepare_return()                                 \
+    {                                                     \
+        prepare_return_##arch();                          \
     }
 
 #if defined(_M_X64) || defined(__x86_64__)

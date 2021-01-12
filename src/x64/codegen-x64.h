@@ -1,10 +1,11 @@
-#define REG_COUNT 8
+#define GPR_COUNT 8
+#define FPR_COUNT 16
 
 // machine resgiters in order
-typedef enum a_register
+typedef enum gpr
 {
-    //x64 register from 0 to 7
-    no_reg = -1,
+    // x64 general register from 0 to 7
+    no_gpr = -1,
     eax,
     ecx,
     edx,
@@ -13,20 +14,45 @@ typedef enum a_register
     ebp,
     esi,
     edi,
-} a_register;
+} gpr;
 
-// register allocation
-extern a_register first_reg;
-extern a_register scratch_reg;
-extern a_register reserved_registers[4];
-extern char *register_order[REG_COUNT];
+typedef enum fpr
+{
+    // x64 fp registers from 0 to 15
+    no_fpr = -1,
+    xmm0,
+    xmm1,
+    xmm2,
+    xmm3,
+    xmm4,
+    xmm5,
+    xmm6,
+    xmm7,
+    xmm8,
+    xmm9,
+    xmm10,
+    xmm11,
+    xmm12,
+    xmm13,
+    xmm14,
+    xmm15
+} fpr;
+
+// fp register allocation
+extern gpr scratch_gpr;
+extern fpr scratch_fpr;
+extern fpr reserved_fprs[1];
+extern char *gpr_order[GPR_COUNT];
+extern char *fpr_order[FPR_COUNT];
 
 // opcodes
-void load_int_to_register_x64(int imm, a_register reg_dst);
-void negate_register_x64(a_register reg_dst);
-void move_register_to_register_x64(a_register reg_dst, a_register reg_src);
-void add_register_to_register_x64(a_register reg_dst, a_register reg_src);
-void subtract_register_from_register_x64(a_register reg_dst, a_register reg_src);
-void multiply_register_to_register_x64(a_register reg_dst, a_register reg_src);
-void divide_register_by_register_x64(a_register reg_dst, a_register reg_src);
+void load_int_to_gpr_x64(int imm, gpr reg_dst);
+void load_int_to_fpr_x64(int imm, fpr reg_dst);
+void convert_gpr_to_fpr_x64(fpr reg_dst, gpr reg_src);
+void convert_fpr_to_gpr_x64(gpr reg_dst, fpr reg_src);
+void negate_fpr_x64(fpr reg_dst);
+void add_fpr_to_fpr_x64(fpr reg_dst, fpr reg_src);
+void subtract_fpr_from_fpr_x64(fpr reg_dst, fpr reg_src);
+void multiply_fpr_to_fpr_x64(fpr reg_dst, fpr reg_src);
+void divide_fpr_by_fpr_x64(fpr reg_dst, fpr reg_src);
 void prepare_return_x64();

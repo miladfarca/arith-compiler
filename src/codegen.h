@@ -25,25 +25,26 @@ extern int codegen_mem_offset;
 //helpers
 void init_codegen();
 void emit(unsigned char byte);
+void emit_imm(int immediate);
 int run_codegen_and_return();
 
 // register allocation
-a_register allocate_register();
-void dealocate_reg(a_register reg);
-void set_final_destination(a_register reg);
-extern a_register final_destination;
+fpr allocate_fpr();
+void dealocate_fpr(fpr reg);
+void set_final_destination(fpr reg);
+extern fpr final_destination;
 
 //debuging
-char *get_reg_symbol(a_register reg);
-void print_inst(char *instr_symbol, int imm, a_register reg_dst, a_register reg_src);
+char *get_gpr_symbol(gpr reg);
+char *get_fpr_symbol(fpr reg);
+void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char *comments);
 
-//opcodes
-void load_int_to_register(int imm, a_register reg_dst);
-void negate_register(a_register reg_dst);
-void move_register_to_register(a_register reg_dst, a_register reg_src);
-void add_register_to_register(a_register reg_dst, a_register reg_src);
-void subtract_register_from_register(a_register reg_dst, a_register reg_src);
-void multiply_register_to_register(a_register reg_dst, a_register reg_src);
-void divide_register_by_register(a_register reg_dst, a_register reg_src);
+// opcodes
+void load_int_to_fpr(int imm, gpr reg_dst);
+void negate_fpr(fpr reg_dst);
+void add_fpr_to_fpr(fpr reg_dst, fpr reg_src);
+void subtract_fpr_from_fpr(fpr reg_dst, fpr reg_src);
+void multiply_fpr_to_fpr(fpr reg_dst, fpr reg_src);
+void divide_fpr_by_fpr(fpr reg_dst, fpr reg_src);
 void prepare_return();
 #endif

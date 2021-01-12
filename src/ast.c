@@ -46,7 +46,7 @@ double evaluate_ast_and_interpret(node *ast)
 }
 
 // tree evaluation and instrcution selection (Depth-first, Post-order)
-a_register evaluate_ast_and_codegen(node *ast)
+fpr evaluate_ast_and_codegen(node *ast)
 {
     if (flag__print_code && !flag__code_header_printed)
     {
@@ -60,44 +60,44 @@ a_register evaluate_ast_and_codegen(node *ast)
     }
     else if (ast->type == number_value)
     {
-        a_register free_reg = allocate_register();
-        load_int_to_register(ast->value, free_reg);
+        fpr free_reg = allocate_fpr();
+        load_int_to_fpr(ast->value, free_reg);
         set_final_destination(free_reg);
         return free_reg;
     }
     else if (ast->type == unary_minus)
     {
-        a_register r0 = evaluate_ast_and_codegen(ast->left);
-        negate_register(r0);
-        set_final_destination(r0);
-        return r0;
+        fpr fpr0 = evaluate_ast_and_codegen(ast->left);
+        negate_fpr(fpr0);
+        set_final_destination(fpr0);
+        return fpr0;
     }
     else
     {
-        a_register r0 = evaluate_ast_and_codegen(ast->left);
-        a_register r1 = evaluate_ast_and_codegen(ast->right);
+        fpr fpr0 = evaluate_ast_and_codegen(ast->left);
+        fpr fpr1 = evaluate_ast_and_codegen(ast->right);
         switch (ast->type)
         {
         case operator_plus:
-            add_register_to_register(r0, r1);
-            set_final_destination(r0);
-            dealocate_reg(r1);
-            return r0;
+            add_fpr_to_fpr(fpr0, fpr1);
+            set_final_destination(fpr0);
+            dealocate_fpr(fpr1);
+            return fpr0;
         case operator_minus:
-            subtract_register_from_register(r0, r1);
-            set_final_destination(r0);
-            dealocate_reg(r1);
-            return r0;
+            subtract_fpr_from_fpr(fpr0, fpr1);
+            set_final_destination(fpr0);
+            dealocate_fpr(fpr1);
+            return fpr0;
         case operator_mul:
-            multiply_register_to_register(r0, r1);
-            set_final_destination(r0);
-            dealocate_reg(r1);
-            return r0;
+            multiply_fpr_to_fpr(fpr0, fpr1);
+            set_final_destination(fpr0);
+            dealocate_fpr(fpr1);
+            return fpr0;
         case operator_div:
-            divide_register_by_register(r0, r1);
-            set_final_destination(r0);
-            dealocate_reg(r1);
-            return r0;
+            divide_fpr_by_fpr(fpr0, fpr1);
+            set_final_destination(fpr0);
+            dealocate_fpr(fpr1);
+            return fpr0;
         }
     }
     return -1;
@@ -132,4 +132,36 @@ void print_ast(node *root, int space)
     }
     //print right node
     print_ast(root->left, space + space_offset_chars);
+}
+void print_ast_json(node *root)
+{
+    if (root == NULL)
+        return;
+    // print this node
+    printf("{");
+    switch (root->type)
+    {
+    case operator_plus:
+        printf("text: { name: '+' },");
+        break;
+    case unary_minus:
+    case operator_minus:
+        printf("text: { name: '-' },");
+        break;
+    case operator_mul:
+        printf("text: { name: '*' },");
+        break;
+    case operator_div:
+        printf("text: { name: '/' },");
+        break;
+    default:
+        printf("text: { name: '%d' },", root->value);
+    }
+    printf("children: ["); 
+    // print right node
+    print_ast_json(root->left);
+    // print left node
+    print_ast_json(root->right);
+    printf("],"); 
+    printf("},\n");  
 }

@@ -21,8 +21,9 @@ typedef struct node
 
 node *new_node(node *left, node *right, int value, node_type type);
 double evaluate_ast_and_interpret(node *ast);
-a_register evaluate_ast_and_codegen(node *ast);
+fpr evaluate_ast_and_codegen(node *ast);
 
 //debugging
 void print_ast(node *root, int space);
+void print_ast_json(node *root);
 #endif
