@@ -25,7 +25,7 @@ flags:
 --print-tokens       Print the terminal symbols (Tokens) of the input
 --print-ast          Print the generated Abstract Syntax Tree (AST)
 --print-ast-json     Print the generated Abstract Syntax Tree (AST) in JSON format
---print-reg-aloc     Print allocation and de-allocation of registers
+--print-reg-alloc    Print allocation and de-allocation of registers
 --print-code         Print the generated instructions
 --print-all          Print all the above
 --no-output          Do not print the final output
