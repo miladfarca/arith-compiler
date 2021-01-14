@@ -1,6 +1,6 @@
 /**
  * First thing we need to do is come up with a Context Free Grammer which will be passed to the parser as an input.
- * Parser will use the grammer to verify the inoput string and build an abstract syntax tree from it.
+ * Parser will use the grammer to verify the input string and build an abstract syntax tree from it.
  * 
  * The grammer start like this:
  * 
