@@ -22,6 +22,7 @@ Once compiled you will have an executable called `./calc`, to see the available 
 $ ./calc --help
 
 flags:
+--print-tokens       Print the terminal symbols (Tokens) of the input
 --print-ast          Print the generated Abstract Syntax Tree (AST)
 --print-ast-json     Print the generated Abstract Syntax Tree (AST) in JSON format
 --print-reg-aloc     Print allocation and de-allocation of registers
