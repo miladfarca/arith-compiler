@@ -21,7 +21,7 @@ int main(int argc, char **argv)
         printf("%-20s %s", "--print-tokens", "Print the terminal symbols (Tokens) of the input\n");
         printf("%-20s %s", "--print-ast", "Print the generated Abstract Syntax Tree (AST)\n");
         printf("%-20s %s", "--print-ast-json", "Print the generated Abstract Syntax Tree (AST) in JSON format\n");
-        printf("%-20s %s", "--print-reg-aloc", "Print allocation and de-allocation of registers\n");
+        printf("%-20s %s", "--print-reg-alloc", "Print allocation and de-allocation of registers\n");
         printf("%-20s %s", "--print-code", "Print the generated instructions\n");
         printf("%-20s %s", "--print-all", "Print all the above\n");
         printf("%-20s %s", "--no-output", "Do not print the final output\n");
