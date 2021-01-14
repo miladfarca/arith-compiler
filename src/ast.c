@@ -109,7 +109,7 @@ void print_ast(node *root, int space)
 {
     if (root == NULL)
         return;
-    //print left node
+    //print right node
     print_ast(root->right, space + space_offset_chars);
     //print this node
     switch (root->type)
@@ -130,7 +130,7 @@ void print_ast(node *root, int space)
     default:
         printf("%*s%d\n", space, "", root->value);
     }
-    //print right node
+    //print left node
     print_ast(root->left, space + space_offset_chars);
 }
 void print_ast_json(node *root, int print_comma)
@@ -162,9 +162,9 @@ void print_ast_json(node *root, int print_comma)
         printf("\"text\": { \"name\": \"%d\" },", root->value);
     }
     printf("\"children\": [");
-    // print right node
-    print_ast_json(root->left, 0);
     // print left node
+    print_ast_json(root->left, 0);
+    // print right node
     print_ast_json(root->right, 1);
     printf("]");
     printf("}");
