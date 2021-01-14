@@ -30,8 +30,8 @@ void emit(unsigned char byte)
     codegen_mem[codegen_mem_offset++] = byte;
 }
 void emit_imm(int immediate)
-{ 
-    *(int*)(codegen_mem + codegen_mem_offset) = immediate;
+{
+    *(int *)(codegen_mem + codegen_mem_offset) = immediate;
     codegen_mem_offset += 4;
 }
 int run_codegen_and_return()
@@ -53,9 +53,9 @@ fpr allocate_fpr()
         // of our allocated_registers, check if there is an offset
         if (allocated_fprs[i] != 1 && allocated_fprs[i] != -1)
         {
-            if (flag__print_reg_aloc)
+            if (flag__print_reg_alloc)
             {
-                printf("> allocated %s\n", get_fpr_symbol(i));
+                printf("allocated %s\n", get_fpr_symbol(i));
             }
             allocated_fprs[i] = 1;
             return i;
@@ -70,9 +70,9 @@ void dealocate_fpr(fpr reg)
     if (allocated_fprs[reg] != -1)
     {
         allocated_fprs[reg] = 0;
-        if (flag__print_reg_aloc)
+        if (flag__print_reg_alloc)
         {
-            printf("> de-allocated %s\n", get_fpr_symbol(reg));
+            printf("de-allocated %s\n", get_fpr_symbol(reg));
         }
     }
 }
@@ -113,34 +113,34 @@ void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char 
 }
 
 // opcodes
-#define ARCH_OPCODES(arch)                                \
-    void load_int_to_fpr(int imm, gpr reg_dst)            \
-    {                                                     \
-        load_int_to_fpr_##arch(imm, reg_dst);             \
-    }                                                     \
-    void negate_fpr(fpr reg_dst)                          \
-    {                                                     \
-       negate_fpr_##arch(reg_dst);                        \
-    }                                                     \
-    void add_fpr_to_fpr(fpr reg_dst, fpr reg_src)         \
-    {                                                     \
-       add_fpr_to_fpr_##arch(reg_dst, reg_src);           \
-    }                                                     \
-    void subtract_fpr_from_fpr(fpr reg_dst, fpr reg_src)  \
-    {                                                     \
-       subtract_fpr_from_fpr_##arch(reg_dst, reg_src);    \
-    }                                                     \
-    void multiply_fpr_to_fpr(fpr reg_dst, fpr reg_src)    \
-    {                                                     \
-        multiply_fpr_to_fpr_##arch(reg_dst, reg_src);     \
-    }                                                     \
-    void divide_fpr_by_fpr(fpr reg_dst, fpr reg_src)      \
-    {                                                     \
-        divide_fpr_by_fpr_##arch(reg_dst, reg_src);       \
-    }                                                     \
-    void prepare_return()                                 \
-    {                                                     \
-        prepare_return_##arch();                          \
+#define ARCH_OPCODES(arch)                               \
+    void load_int_to_fpr(int imm, fpr reg_dst)           \
+    {                                                    \
+        load_int_to_fpr_##arch(imm, reg_dst);            \
+    }                                                    \
+    void negate_fpr(fpr reg_dst)                         \
+    {                                                    \
+        negate_fpr_##arch(reg_dst);                      \
+    }                                                    \
+    void add_fpr_to_fpr(fpr reg_dst, fpr reg_src)        \
+    {                                                    \
+        add_fpr_to_fpr_##arch(reg_dst, reg_src);         \
+    }                                                    \
+    void subtract_fpr_from_fpr(fpr reg_dst, fpr reg_src) \
+    {                                                    \
+        subtract_fpr_from_fpr_##arch(reg_dst, reg_src);  \
+    }                                                    \
+    void multiply_fpr_to_fpr(fpr reg_dst, fpr reg_src)   \
+    {                                                    \
+        multiply_fpr_to_fpr_##arch(reg_dst, reg_src);    \
+    }                                                    \
+    void divide_fpr_by_fpr(fpr reg_dst, fpr reg_src)     \
+    {                                                    \
+        divide_fpr_by_fpr_##arch(reg_dst, reg_src);      \
+    }                                                    \
+    void prepare_return()                                \
+    {                                                    \
+        prepare_return_##arch();                         \
     }
 
 #if defined(_M_X64) || defined(__x86_64__)

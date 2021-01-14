@@ -23,10 +23,10 @@ char *fpr_order[FPR_COUNT] = {"xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "x
 void load_int_to_gpr_x64(int imm, gpr reg_dst)
 {
     // MOV
-    gpr reg_code = (unsigned char) 0xb8 | reg_dst; 
+    gpr reg_code = (unsigned char)0xb8 | reg_dst;
     emit(reg_code);
     emit_imm(imm);
-    print_inst("movl", imm, get_gpr_symbol(reg_dst), NULL, "\t\t# move immediate to general register");
+    print_inst("mov", imm, get_gpr_symbol(reg_dst), NULL, "\t\t\t# move immediate to general register");
 }
 
 void load_int_to_fpr_x64(int imm, fpr reg_dst)

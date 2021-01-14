@@ -1,5 +1,5 @@
 /**
- * First thing we need to do is come up with a Context Free Grammer which will be passed to the parse as an input.
+ * First thing we need to do is come up with a Context Free Grammer which will be passed to the parser as an input.
  * Parser will use the grammer to verify the inoput string and build an abstract syntax tree from it.
  * 
  * The grammer start like this:
@@ -41,13 +41,14 @@
  *        -> -E
  *        -> number
  * 
- * Now lets implenets a recursive decent parse using the above grammer. We will create a function for each variable.
+ * Now lets implenets a recursive decent parser using the above grammer. We will create a function for each variable.
  */
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include "ast.h"
+#include "flags.h"
 #include "parser.h"
 
 // Helpers
@@ -68,7 +69,12 @@ int read_number()
     //initialize all the indexes to 0
     char buffer[32] = {0};
     memcpy(buffer, &line[start_index], offset);
-    return atoi(buffer);
+    int output = atoi(buffer);
+    if (flag__print_tokens)
+    {
+        printf("%d\n", output);
+    }
+    return output;
 }
 
 // CGF returning AST Nodes
@@ -161,6 +167,10 @@ node *FACTOR()
 
 void match(char in)
 {
+    if (flag__print_tokens)
+    {
+        printf("%c\n", in);
+    }
     if (get_current_char() == in)
     {
         current_index++;

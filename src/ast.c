@@ -133,35 +133,39 @@ void print_ast(node *root, int space)
     //print right node
     print_ast(root->left, space + space_offset_chars);
 }
-void print_ast_json(node *root)
+void print_ast_json(node *root, int print_comma)
 {
     if (root == NULL)
         return;
     // print this node
+    if (print_comma)
+    {
+        printf(",");
+    }
     printf("{");
     switch (root->type)
     {
     case operator_plus:
-        printf("text: { name: '+' },");
+        printf("\"text\": { \"name\": \"+\" },");
         break;
     case unary_minus:
     case operator_minus:
-        printf("text: { name: '-' },");
+        printf("\"text\": { \"name\": \"-\" },");
         break;
     case operator_mul:
-        printf("text: { name: '*' },");
+        printf("\"text\": { \"name\": \"*\" },");
         break;
     case operator_div:
-        printf("text: { name: '/' },");
+        printf("\"text\": { \"name\": \"/\" },");
         break;
     default:
-        printf("text: { name: '%d' },", root->value);
+        printf("\"text\": { \"name\": \"%d\" },", root->value);
     }
-    printf("children: ["); 
+    printf("\"children\": [");
     // print right node
-    print_ast_json(root->left);
+    print_ast_json(root->left, 0);
     // print left node
-    print_ast_json(root->right);
-    printf("],"); 
-    printf("},\n");  
+    print_ast_json(root->right, 1);
+    printf("]");
+    printf("}");
 }

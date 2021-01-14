@@ -3,10 +3,11 @@
 #include <string.h>
 #include "parser.h"
 
+int flag__print_tokens = 0;
 int flag__print_ast = 0;
 int flag__print_ast_json = 0;
 int flag__print_code = 0;
-int flag__print_reg_aloc = 0;
+int flag__print_reg_alloc = 0;
 int flag__print_all = 0;
 int flag__print_help = 0;
 int flag__inline = 0;
@@ -39,6 +40,11 @@ void parse_args(int argc, char **argv)
             flag__no_output = 1;
             valid_flag = 1;
         }
+        if (strcmp(argv[i], "--print-tokens") == 0)
+        {
+            flag__print_tokens = 1;
+            valid_flag = 1;
+        }
         if (strcmp(argv[i], "--print-ast") == 0)
         {
             flag__print_ast = 1;
@@ -49,9 +55,9 @@ void parse_args(int argc, char **argv)
             flag__print_ast_json = 1;
             valid_flag = 1;
         }
-        if (strcmp(argv[i], "--print-reg-aloc") == 0)
+        if (strcmp(argv[i], "--print-reg-alloc") == 0)
         {
-            flag__print_reg_aloc = 1;
+            flag__print_reg_alloc = 1;
             valid_flag = 1;
         }
         if (strcmp(argv[i], "--print-code") == 0)
@@ -61,9 +67,10 @@ void parse_args(int argc, char **argv)
         }
         if (strcmp(argv[i], "--print-all") == 0)
         {
+            flag__print_tokens = 1;
             flag__print_ast = 1;
             flag__print_ast_json = 1;
-            flag__print_reg_aloc = 1;
+            flag__print_reg_alloc = 1;
             flag__print_code = 1;
             valid_flag = 1;
         }
@@ -72,7 +79,8 @@ void parse_args(int argc, char **argv)
             flag__if_jitless = 1;
             valid_flag = 1;
         }
-        if (expecting_inline){
+        if (expecting_inline)
+        {
             line = malloc(strlen(argv[i]));
             strcpy(line, argv[i]);
             expecting_inline = 0;

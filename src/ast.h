@@ -25,5 +25,5 @@ fpr evaluate_ast_and_codegen(node *ast);
 
 //debugging
 void print_ast(node *root, int space);
-void print_ast_json(node *root);
+void print_ast_json(node *root, int depth);
 #endif

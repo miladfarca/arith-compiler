@@ -1,6 +1,7 @@
+extern int flag__print_tokens;
 extern int flag__print_ast;
 extern int flag__print_ast_json;
-extern int flag__print_reg_aloc;
+extern int flag__print_reg_alloc;
 extern int flag__print_code;
 extern int flag__print_all;
 extern int flag__print_help;

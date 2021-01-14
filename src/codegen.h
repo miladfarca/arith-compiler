@@ -40,7 +40,7 @@ char *get_fpr_symbol(fpr reg);
 void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char *comments);
 
 // opcodes
-void load_int_to_fpr(int imm, gpr reg_dst);
+void load_int_to_fpr(int imm, fpr reg_dst);
 void negate_fpr(fpr reg_dst);
 void add_fpr_to_fpr(fpr reg_dst, fpr reg_src);
 void subtract_fpr_from_fpr(fpr reg_dst, fpr reg_src);

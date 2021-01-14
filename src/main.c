@@ -18,6 +18,7 @@ int main(int argc, char **argv)
     if (flag__print_help)
     {
         printf("\nflags:\n");
+        printf("%-20s %s", "--print-tokens", "Print the terminal symbols (Tokens) of the input\n");
         printf("%-20s %s", "--print-ast", "Print the generated Abstract Syntax Tree (AST)\n");
         printf("%-20s %s", "--print-ast-json", "Print the generated Abstract Syntax Tree (AST) in JSON format\n");
         printf("%-20s %s", "--print-reg-aloc", "Print allocation and de-allocation of registers\n");
@@ -32,7 +33,8 @@ int main(int argc, char **argv)
 
     size_t len = 0;
     ssize_t read;
-    if (!flag__inline){
+    if (!flag__inline)
+    {
         // read from stdin
         read = getline(&line, &len, stdin);
     }
@@ -48,7 +50,8 @@ int main(int argc, char **argv)
         }
         if (flag__print_ast_json)
         {
-            print_ast_json(root);
+            print_ast_json(root, 0);
+            printf("\n");
         }
         // start evaluating and interpret or codegen
         int output;
@@ -63,12 +66,14 @@ int main(int argc, char **argv)
             output = run_codegen_and_return();
         }
 
-        if (!flag__no_output){
+        if (!flag__no_output)
+        {
             printf("= %d\n", output);
         }
     }
 
-    if (!flag__inline){
+    if (!flag__inline)
+    {
         free(line);
     }
     return 0;
