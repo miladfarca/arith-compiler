@@ -38,6 +38,10 @@ typedef enum fpr
     xmm15
 } fpr;
 
+// code emitters
+void emit(unsigned char byte);
+void emit_imm(int immediate);
+
 // fp register allocation
 extern gpr scratch_gpr;
 extern fpr scratch_fpr;

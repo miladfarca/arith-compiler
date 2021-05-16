@@ -25,15 +25,6 @@ void init_codegen()
         allocated_fprs[reserved_fprs[i]] = -1;
     }
 }
-void emit(unsigned char byte)
-{
-    codegen_mem[codegen_mem_offset++] = byte;
-}
-void emit_imm(int immediate)
-{
-    *(int *)(codegen_mem + codegen_mem_offset) = immediate;
-    codegen_mem_offset += 4;
-}
 int run_codegen_and_return()
 {
     prepare_return();

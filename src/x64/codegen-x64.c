@@ -20,6 +20,18 @@ char *fpr_order[FPR_COUNT] = {"xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "x
     /* add src */                            \
     reg_code |= (unsigned char)reg_src;
 
+// code emitters
+void emit(unsigned char byte)
+{
+    codegen_mem[codegen_mem_offset++] = byte;
+}
+
+void emit_imm(int immediate)
+{
+    *(int *)(codegen_mem + codegen_mem_offset) = immediate;
+    codegen_mem_offset += 4;
+}
+
 void load_int_to_gpr_x64(int imm, gpr reg_dst)
 {
     // MOV

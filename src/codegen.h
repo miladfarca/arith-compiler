@@ -24,8 +24,6 @@ extern int codegen_mem_offset;
 
 //helpers
 void init_codegen();
-void emit(unsigned char byte);
-void emit_imm(int immediate);
 int run_codegen_and_return();
 
 // register allocation
