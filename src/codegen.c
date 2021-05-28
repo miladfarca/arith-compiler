@@ -25,9 +25,10 @@ void init_codegen()
         allocated_fprs[reserved_fprs[i]] = -1;
     }
 }
-int run_codegen_and_return()
+int run_codegen_and_return(fpr reg_result)
 {
-    prepare_return();
+    prepare_return(reg_result);
+    dealocate_fpr(reg_result);
     int (*fun_ptr)() = (void *)codegen_mem;
     return (*fun_ptr)();
 }
@@ -66,11 +67,6 @@ void dealocate_fpr(fpr reg)
             printf("de-allocated %s\n", get_fpr_symbol(reg));
         }
     }
-}
-fpr final_destination = -1;
-void set_final_destination(fpr reg)
-{
-    final_destination = reg;
 }
 
 // debuging
@@ -129,9 +125,9 @@ void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char 
     {                                                    \
         divide_fpr_by_fpr_##arch(reg_dst, reg_src);      \
     }                                                    \
-    void prepare_return()                                \
+    void prepare_return(fpr reg_result)                  \
     {                                                    \
-        prepare_return_##arch();                         \
+        prepare_return_##arch(reg_result);               \
     }
 
 #if defined(_M_X64) || defined(__x86_64__)

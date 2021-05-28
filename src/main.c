@@ -4,6 +4,7 @@
 #include "parser.h"
 #include "ast.h"
 #include "codegen.h"
+#include "test.h"
 
 // globals
 int current_index = 0;
@@ -27,22 +28,27 @@ int main(int argc, char **argv)
         printf("%-20s %s", "--no-output", "Do not print the final output\n");
         printf("%-20s %s", "--jitless", "Interpret the result and do not generated code\n");
         printf("%-20s %s", "--inline", "Enter the input as an argument\n");
+        printf("%-20s %s", "--test", "Run unit tests\n");
         printf("\n");
         exit(0);
     }
 
     size_t len = 0;
     ssize_t read;
+    if (flag__run_tests){
+        // Only run the unit tests.
+        return run_tests();  
+    }
     if (!flag__inline)
     {
-        // read from stdin
+        // read from stdin.
         read = getline(&line, &len, stdin);
     }
     if (flag__inline || read > 0)
     {
-        // start parsing and creating the AST
+        // start parsing and creating the AST.
         node *root = E();
-        // check we need to print the ast tree
+        // check we need to print the ast tree.
         if (flag__print_ast)
         {
             printf("--- Syntax Tree ---\n\n");
@@ -53,7 +59,7 @@ int main(int argc, char **argv)
             print_ast_json(root, 0);
             printf("\n");
         }
-        // start evaluating and interpret or codegen
+        // start evaluating and interpret or codegen.
         int output;
         if (flag__if_jitless)
         {
@@ -62,8 +68,8 @@ int main(int argc, char **argv)
         else
         {
             init_codegen();
-            evaluate_ast_and_codegen(root);
-            output = run_codegen_and_return();
+            fpr reg_result = evaluate_ast_and_codegen(root);
+            output = run_codegen_and_return(reg_result);
         }
 
         if (!flag__no_output)

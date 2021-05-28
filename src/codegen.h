@@ -24,13 +24,11 @@ extern int codegen_mem_offset;
 
 //helpers
 void init_codegen();
-int run_codegen_and_return();
+int run_codegen_and_return(fpr reg_result);
 
 // register allocation
 fpr allocate_fpr();
 void dealocate_fpr(fpr reg);
-void set_final_destination(fpr reg);
-extern fpr final_destination;
 
 //debuging
 char *get_gpr_symbol(gpr reg);
@@ -44,5 +42,5 @@ void add_fpr_to_fpr(fpr reg_dst, fpr reg_src);
 void subtract_fpr_from_fpr(fpr reg_dst, fpr reg_src);
 void multiply_fpr_to_fpr(fpr reg_dst, fpr reg_src);
 void divide_fpr_by_fpr(fpr reg_dst, fpr reg_src);
-void prepare_return();
+void prepare_return(fpr reg_result);
 #endif

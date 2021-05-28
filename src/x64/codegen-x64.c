@@ -128,10 +128,10 @@ void divide_fpr_by_fpr_x64(fpr reg_dst, fpr reg_src)
     print_inst("divss", 0, get_fpr_symbol(reg_dst), get_fpr_symbol(reg_src), "\t# divide fp register by fp register");
 }
 
-void prepare_return_x64()
+void prepare_return_x64(fpr reg_result)
 {
     // return register is eax
-    convert_fpr_to_gpr_x64(eax, final_destination);
+    convert_fpr_to_gpr_x64(eax, reg_result);
     // retq
     emit(0xc3);
 }

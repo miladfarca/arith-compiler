@@ -62,14 +62,12 @@ fpr evaluate_ast_and_codegen(node *ast)
     {
         fpr free_reg = allocate_fpr();
         load_int_to_fpr(ast->value, free_reg);
-        set_final_destination(free_reg);
         return free_reg;
     }
     else if (ast->type == unary_minus)
     {
         fpr fpr0 = evaluate_ast_and_codegen(ast->left);
         negate_fpr(fpr0);
-        set_final_destination(fpr0);
         return fpr0;
     }
     else
@@ -80,22 +78,18 @@ fpr evaluate_ast_and_codegen(node *ast)
         {
         case operator_plus:
             add_fpr_to_fpr(fpr0, fpr1);
-            set_final_destination(fpr0);
             dealocate_fpr(fpr1);
             return fpr0;
         case operator_minus:
             subtract_fpr_from_fpr(fpr0, fpr1);
-            set_final_destination(fpr0);
             dealocate_fpr(fpr1);
             return fpr0;
         case operator_mul:
             multiply_fpr_to_fpr(fpr0, fpr1);
-            set_final_destination(fpr0);
             dealocate_fpr(fpr1);
             return fpr0;
         case operator_div:
             divide_fpr_by_fpr(fpr0, fpr1);
-            set_final_destination(fpr0);
             dealocate_fpr(fpr1);
             return fpr0;
         }

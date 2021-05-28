@@ -8,5 +8,6 @@ extern int flag__print_help;
 extern int flag__inline;
 extern int flag__no_output;
 extern int flag__if_jitless;
+extern int flag__run_tests;
 extern int flag__code_header_printed;
 void parse_args(int argc, char **argv);

@@ -13,6 +13,7 @@ int flag__print_help = 0;
 int flag__inline = 0;
 int flag__no_output = 0;
 int flag__if_jitless = 0;
+int flag__run_tests = 0;
 int flag__code_header_printed = 0;
 
 int expecting_inline = 0;
@@ -77,6 +78,11 @@ void parse_args(int argc, char **argv)
         if (strcmp(argv[i], "--jitless") == 0)
         {
             flag__if_jitless = 1;
+            valid_flag = 1;
+        }
+        if (strcmp(argv[i], "--test") == 0)
+        {
+            flag__run_tests = 1;
             valid_flag = 1;
         }
         if (expecting_inline)
