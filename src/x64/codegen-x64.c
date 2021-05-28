@@ -13,6 +13,9 @@ char *fpr_order[FPR_COUNT] = {"xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "x
                               "xmm7", "xmm8", "xmm9", "xmm10", "xmm11", "xmm12", "xmm13",
                               "xmm14", "xmm15"};
 
+//TODO Implement REX prefix, more info on its encoding:
+// https://wiki.osdev.org/X86-64_Instruction_Encoding#REX_prefix
+// https://www.systutorials.com/beginners-guide-x86-64-instruction-encoding/
 #define PREP_REG_CODE()                      \
     unsigned char reg_code = 0xc0;           \
     /* add dst */                            \

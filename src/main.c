@@ -35,9 +35,10 @@ int main(int argc, char **argv)
 
     size_t len = 0;
     ssize_t read;
-    if (flag__run_tests){
+    if (flag__run_tests)
+    {
         // Only run the unit tests.
-        return run_tests();  
+        return run_tests();
     }
     if (!flag__inline)
     {

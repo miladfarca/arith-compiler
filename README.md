@@ -31,6 +31,7 @@ flags:
 --no-output          Do not print the final output
 --jitless            Interpret the result and do not generated code
 --inline             Enter the input as an argument
+--test               Run unit tests
 ```
 You can do basic arithmetic using calc:
 ```
