@@ -137,6 +137,6 @@ void prepare_return_arm64(fpr reg_result)
 {
     // return register is eax
     convert_fpr_to_gpr_arm64(w0, reg_result);
-    // ret, address is in  x30
+    // ret, address is in x30
     emit(0xd65f03c0);
 }
