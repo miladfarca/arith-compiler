@@ -38,6 +38,11 @@ typedef enum fpr
     xmm15
 } fpr;
 
+// debuging
+char *get_gpr_symbol(gpr reg);
+char *get_fpr_symbol(fpr reg);
+void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char *comments);
+
 // code emitters
 void emit(unsigned char byte);
 void emit_imm(int immediate);

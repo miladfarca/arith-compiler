@@ -69,36 +69,6 @@ void dealocate_fpr(fpr reg)
     }
 }
 
-// debuging
-char *get_gpr_symbol(gpr reg)
-{
-    return gpr_order[reg];
-}
-char *get_fpr_symbol(fpr reg)
-{
-    return fpr_order[reg];
-}
-void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char *comments)
-{
-    if (flag__print_code)
-    {
-        if (reg_dst == NULL && reg_src == NULL)
-        {
-            // instruction has no operands
-            printf("%-4s %s\n", instr_symbol, comments);
-        }
-        else if (reg_src == NULL)
-        {
-            // immediate insted of source
-            printf("%-4s %d %s %s\n", instr_symbol, imm, reg_dst, comments);
-        }
-        else
-        {
-            printf("%-4s %s %s %s\n", instr_symbol, reg_src, reg_dst, comments);
-        }
-    }
-}
-
 // opcodes
 #define ARCH_OPCODES(arch)                               \
     void load_int_to_fpr(int imm, fpr reg_dst)           \
@@ -135,6 +105,7 @@ void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char 
 ARCH_OPCODES(x64)
 #elif defined(__AARCH64EL__) || defined(_M_ARM64)
 // ARM64
+ARCH_OPCODES(arm64)
 #elif defined(__mips64)
 // MIPS64
 #elif defined(__PPC64__) || defined(_ARCH_PPC64)

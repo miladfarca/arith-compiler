@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
+#include "../flags.h"
 #include "../codegen.h"
 
 // register allocation
@@ -12,6 +13,35 @@ char *gpr_order[GPR_COUNT] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "
 char *fpr_order[FPR_COUNT] = {"xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6",
                               "xmm7", "xmm8", "xmm9", "xmm10", "xmm11", "xmm12", "xmm13",
                               "xmm14", "xmm15"};
+// debuging
+char *get_gpr_symbol(gpr reg)
+{
+    return gpr_order[reg];
+}
+char *get_fpr_symbol(fpr reg)
+{
+    return fpr_order[reg];
+}
+void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char *comments)
+{
+    if (flag__print_code)
+    {
+        if (reg_dst == NULL && reg_src == NULL)
+        {
+            // instruction has no operands
+            printf("%-4s %s\n", instr_symbol, comments);
+        }
+        else if (reg_src == NULL)
+        {
+            // immediate insted of source
+            printf("%-4s %d %s %s\n", instr_symbol, imm, reg_dst, comments);
+        }
+        else
+        {
+            printf("%-4s %s %s %s\n", instr_symbol, reg_src, reg_dst, comments);
+        }
+    }
+}
 
 //TODO Implement REX prefix, more info on its encoding:
 // https://wiki.osdev.org/X86-64_Instruction_Encoding#REX_prefix

@@ -8,7 +8,7 @@ extern int codegen_mem_offset;
 #include "x64/codegen-x64.h"
 #elif defined(__AARCH64EL__) || defined(_M_ARM64)
 // ARM64
-#error "Unimplemented!"
+#include "arm64/codegen-arm64.h"
 #elif defined(__mips64)
 // MIPS64
 #error "Unimplemented!"
@@ -22,18 +22,13 @@ extern int codegen_mem_offset;
 #error "Unknown architecture!"
 #endif
 
-//helpers
+// helpers
 void init_codegen();
 int run_codegen_and_return(fpr reg_result);
 
 // register allocation
 fpr allocate_fpr();
 void dealocate_fpr(fpr reg);
-
-//debuging
-char *get_gpr_symbol(gpr reg);
-char *get_fpr_symbol(fpr reg);
-void print_inst(char *instr_symbol, int imm, char *reg_dst, char *reg_src, char *comments);
 
 // opcodes
 void load_int_to_fpr(int imm, fpr reg_dst);

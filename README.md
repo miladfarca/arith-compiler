@@ -1,19 +1,28 @@
-# arith-compiler
+# Arithmetic Compiler
 Implementing an `Arithmetic Interpreter and Just in time (JIT) Compiler`.
 
-In this project I will be writing an Interpreter/Compiler in C for doing basic
+In this project we will be writing an Interpreter/Compiler in C for doing basic
 arithmetic computation.
 
 We will follow the methods explained in `the dragon book (Compilers: Principles, Techniques, and Tools)`. 
 We will start by writing a lexical analyzer and a `Recursive Decent`, top down parser and create a `Abstract Syntax Tree`.
 Then we will traverse the binary tree using `Depth-first search, Post-order traversal`, visit each node and either interpret it or generate code. Code generation must include a registrar allocation phase as we only have a limited number of registers to work with on any architecture.
 
+## Supported architectures
+```
+x64
+arm64
+```
+
 ## Build
-Checkout the project and simply run `make` to compile the src files:
+Checkout the project and simply run `make` to compile the src files on an `x64` host.
+You can build on other supported architectures by passing the name as a command line argument.
 ```
 git checkout https://github.com/miladfarca/arith-compiler.git
 cd arith-compiler
 make
+# or 
+make <arch=1> # i.e `make arm64=1` 
 ```
 
 ## Run
@@ -40,7 +49,12 @@ $./calc
 = 9
 ```
 
-## Syntax Tree Format
+### Run unit tests
+```
+$./calc --test
+```
+
+## Syntax Tree format
 Using the `--print-ast` flag you will be able to see the generated binary tree from your input. As an example `5+4` will produce the following:
 ```
 --- Syntax Tree ---

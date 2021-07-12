@@ -1,8 +1,17 @@
-VPATH=${SRC_PATH}:./src:./src/x64/
+ifdef arm64
+	VPATH=${SRC_PATH}:./src:./src/arm64/
+else
+	VPATH=${SRC_PATH}:./src:./src/x64/
+endif	
 CC=gcc
 CFLAGS=-Wall
 ODIR=obj
-_OBJ = main.o test.o flags.o parser.o ast.o codegen.o codegen-x64.o
+_OBJ = main.o test.o flags.o parser.o ast.o codegen.o
+ifdef arm64
+	_OBJ += codegen-arm64.o
+else
+	_OBJ += codegen-x64.o
+endif
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c
