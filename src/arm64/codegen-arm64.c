@@ -135,7 +135,7 @@ void divide_fpr_by_fpr_arm64(fpr reg_dst, fpr reg_src)
 
 void prepare_return_arm64(fpr reg_result)
 {
-    // return register is eax
+    // return register is w0
     convert_fpr_to_gpr_arm64(w0, reg_result);
     // ret, address is in x30
     emit(0xd65f03c0);
