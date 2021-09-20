@@ -29,6 +29,12 @@ int run_codegen_and_return(fpr reg_result)
 {
     prepare_return(reg_result);
     dealocate_fpr(reg_result);
+    // TOO: Look into creating a proper function prologue and epilogue.
+    // At the moment we are relying on the `codegen_mem` function ptr to save
+    // the return address for us on the stack or a return register (based on the ABI)
+    // at compile time by the AOT compiler, as it does for other C functions.
+    // The `prepare_return` is serving as our JITed epilogue here. It's supposed to
+    // load the return value from stack (or link register) and jump to it at runtime.
     int (*fun_ptr)() = (void *)codegen_mem;
     return (*fun_ptr)();
 }
