@@ -10,8 +10,7 @@
 // https://en.wikipedia.org/wiki/BURS
 //
 // The goal is to look for and discard numbers with opposite signs which are
-// being added to themselves in the middle of an expression, i.e (-2+2). The
-// algorithm works as follows:
+// being added to themselves, i.e `2-2`. The algorithm works as follows:
 //
 // - Do depth-first search, postorder traversal of AST.
 // - Check if this node is not a root node.
