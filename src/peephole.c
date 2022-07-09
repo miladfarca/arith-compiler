@@ -86,7 +86,7 @@ void evaluate_ast_and_optimize_peephole(node *this_node, node *parent_node) {
       }
 
       if (nodes_are_equal(parent_c, this_c)) {
-        // make the other child of this_node as the parent node.
+        // make the other child of this_node become the parent node.
         if (flag__print_opt) {
           printf("At %p, discarding nodes with leaf node values %d and %d.\n",
                  this_node, parent_c->left->value, parent_c->right->value);
