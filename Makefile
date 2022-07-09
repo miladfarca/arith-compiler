@@ -6,7 +6,7 @@ endif
 CC=gcc
 CFLAGS=-Wall
 ODIR=obj
-_OBJ = main.o test.o flags.o parser.o ast.o codegen.o
+_OBJ = main.o test.o flags.o parser.o ast.o peephole.o codegen.o
 ifdef arm64
 	_OBJ += codegen-arm64.o
 else

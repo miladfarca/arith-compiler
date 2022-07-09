@@ -10,6 +10,8 @@ int flag__print_code = 0;
 int flag__print_reg_alloc = 0;
 int flag__print_all = 0;
 int flag__print_help = 0;
+int flag__print_opt = 0;
+int flag__no_opt = 0;
 int flag__inline = 0;
 int flag__no_output = 0;
 int flag__if_jitless = 0;
@@ -66,6 +68,10 @@ void parse_args(int argc, char **argv)
             flag__print_code = 1;
             valid_flag = 1;
         }
+        if (strcmp(argv[i], "--print-opt") == 0) {
+          flag__print_opt = 1;
+          valid_flag = 1;
+        }
         if (strcmp(argv[i], "--print-all") == 0)
         {
             flag__print_tokens = 1;
@@ -73,7 +79,12 @@ void parse_args(int argc, char **argv)
             flag__print_ast_json = 1;
             flag__print_reg_alloc = 1;
             flag__print_code = 1;
+            flag__print_opt = 1;
             valid_flag = 1;
+        }
+        if (strcmp(argv[i], "--no-opt") == 0) {
+          flag__no_opt = 1;
+          valid_flag = 1;
         }
         if (strcmp(argv[i], "--jitless") == 0)
         {

@@ -93,6 +93,20 @@ static char *test_complex_1()
     return 0;
 }
 
+static char *test_peephole_opt_1() {
+  int result;
+  COMPILE("-2+2+1-1-5+5", result)
+  t_assert("error, result !=-10", result == 0);
+  return 0;
+}
+
+static char *test_peephole_opt_2() {
+  int result;
+  COMPILE("-2+2/3*6+(-2+2)-2+2", result)
+  t_assert("error, result !=-10", result == 2);
+  return 0;
+}
+
 static char *all_tests()
 {
     t_run_test(test_add_1);
@@ -105,6 +119,8 @@ static char *all_tests()
     t_run_test(test_div_2);
     t_run_test(test_unary_1);
     t_run_test(test_complex_1);
+    t_run_test(test_peephole_opt_1);
+    t_run_test(test_peephole_opt_2);
     return 0;
 }
 
