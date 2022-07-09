@@ -6,7 +6,8 @@ arithmetic computation.
 
 We will follow the methods explained in `the dragon book (Compilers: Principles, Techniques, and Tools)`. 
 We will start by writing a lexical analyzer and a `Recursive Decent`, top down parser and create a `Abstract Syntax Tree`.
-Then we will traverse the binary tree using `Depth-first search, Post-order traversal`, visit each node and either interpret it or generate code. Code generation must include a registrar allocation phase as we only have a limited number of registers to work with on any architecture.
+Next we will optimize the tree with methods such peephole optimization. 
+We will then traverse the binary tree using `Depth-first search, Post-order traversal`, visit each node and either interpret it or generate code. Code generation must include a registrar allocation phase as we only have a limited number of registers to work with on any architecture.
 
 ## Supported architectures
 ```
