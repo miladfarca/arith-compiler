@@ -37,7 +37,9 @@ flags:
 --print-ast-json     Print the generated Abstract Syntax Tree (AST) in JSON format
 --print-reg-alloc    Print allocation and de-allocation of registers
 --print-code         Print the generated instructions
+--print-opt          Print optimization details
 --print-all          Print all the above
+--no-opt             Do not perform any optimizations
 --no-output          Do not print the final output
 --jitless            Interpret the result and do not generated code
 --inline             Enter the input as an argument
